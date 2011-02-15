@@ -1,0 +1,52 @@
+zfl_bits(7)
+===========
+
+
+NAME
+----
+zfl_bits - base class for ZFL
+
+
+SYNOPSIS
+--------
+----
+zfl_bits_t *
+    zfl_bits_new (void);
+void
+    zfl_bits_destroy (zfl_bits_t **self_p);
+int
+    zfl_bits_filler (zfl_bits_t *self);
+void
+    zfl_bits_filler_set (zfl_bits_t *self, int newvalue);
+int
+    zfl_bits_test (Bool verbose);
+----
+
+DESCRIPTION
+-----------
+Provides manual template for new classes, and canonical style guidelines for all
+ZFL source code.
+
+
+EXAMPLE
+-------
+.From zfl_bits_test method
+----
+zfl_bits_t
+    *base;
+
+base = zfl_bits_new ();
+assert (base);
+
+zfl_bits_filler_set (base, 123);
+assert (zfl_bits_filler (base) == 123);
+
+zfl_bits_destroy (&base);
+assert (base == NULL);
+----
+
+
+SEE ALSO
+--------
+linkzfl:zfl[7]
+

@@ -7,6 +7,7 @@ include_HEADERS = \
     ../include/zfl.h \
     ../include/zfl_prelude.h \
     ../include/zfl_base.h \
+    ../include/zfl_bits.h \
     ../include/zfl_clock.h \
     ../include/zfl_config.h \
     ../include/zfl_config_json.h \
@@ -22,6 +23,7 @@ include_HEADERS = \
 
 libzfl_la_SOURCES = \
     zfl_base.c \
+    zfl_bits.c \
     zfl_blob.c \
     zfl_clock.c \
     zfl_config.c \

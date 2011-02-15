@@ -2,6 +2,7 @@ MAN1 =
 MAN3 =
 MAN7 = zfl.7 \
     zfl_base.7 \
+    zfl_bits.7 \
     zfl_blob.7 \
 	zfl_clock.7 \
     zfl_config.7 \

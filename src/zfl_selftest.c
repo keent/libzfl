@@ -26,6 +26,7 @@
 
 #include "../include/zfl_prelude.h"
 #include "../include/zfl_base.h"
+#include "../include/zfl_bits.h"
 #include "../include/zfl_blob.h"
 #include "../include/zfl_clock.h"
 #include "../include/zfl_config.h"
@@ -53,6 +54,7 @@ int main (int argc, char *argv [])
     printf ("Running ZFL self tests...\n");
 
     zfl_base_test (verbose);
+    zfl_bits_test (verbose);
     zfl_blob_test (verbose);
     zfl_clock_test (verbose);
     zfl_config_test (verbose);

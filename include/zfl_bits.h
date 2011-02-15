@@ -1,5 +1,5 @@
 /*  =========================================================================
-    zfl.h - ZFL wrapper
+    zfl_bits.h - ZFL base class
 
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
@@ -22,31 +22,29 @@
     =========================================================================
 */
 
-#ifndef __ZFL_H_INCLUDED__
-#define __ZFL_H_INCLUDED__
+#ifndef __ZFL_BITS_H_INCLUDED__
+#define __ZFL_BITS_H_INCLUDED__
 
-//  Always include ZeroMQ header file
-//
-#include <zmq.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-//  Set up environment for the application
-//
-#include <zfl_prelude.h>
+//  Opaque class structure
+typedef struct _zfl_bits_t zfl_bits_t;
 
-//  Classes listed in alphabetical order except for dependencies
-//
-#include <zfl_base.h>
-#include <zfl_bits.h>
-#include <zfl_blob.h>
-#include <zfl_clock.h>
-#include <zfl_config.h>
-#include <zfl_config_json.h>
-#include <zfl_config_zpl.h>
-#include <zfl_device.h>
-#include <zfl_hash.h>
-#include <zfl_list.h>
-#include <zfl_msg.h>
-#include <zfl_rpc.h>
-#include <zfl_rpcd.h>
+zfl_bits_t *
+    zfl_bits_new (void);
+void
+    zfl_bits_destroy (zfl_bits_t **self_p);
+int
+    zfl_bits_filler (zfl_bits_t *self);
+void
+    zfl_bits_filler_set (zfl_bits_t *self, int newvalue);
+int
+    zfl_bits_test (Bool verbose);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
