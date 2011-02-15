@@ -421,9 +421,6 @@ zfl_rpcd_destroy (zfl_rpcd_t **self_p)
     assert (stop_msg);
     zfl_msg_push (stop_msg, "stop");
     zfl_msg_send (&stop_msg, self->ctrl_socket);
-
-    //  Wait until RPC thread terminates
-    zfl_thread_wait (self->thread);
     zfl_thread_destroy (&self->thread);
 
     //  Close sockets

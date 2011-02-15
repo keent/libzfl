@@ -52,9 +52,9 @@ int main (int argc, char *argv [])
 
     printf ("Running ZFL self tests...\n");
 
-/*
     zfl_base_test (verbose);
     zfl_blob_test (verbose);
+    zfl_clock_test (verbose);
     zfl_config_test (verbose);
     zfl_config_json_test (verbose);
     zfl_config_zpl_test (verbose);
@@ -64,8 +64,6 @@ int main (int argc, char *argv [])
     zfl_msg_test (verbose);
     zfl_rpc_test (verbose);
     zfl_rpcd_test (verbose);
-*/
-    zfl_clock_test (verbose);
     zfl_thread_test (verbose);
 
     printf ("Tests passed OK\n");

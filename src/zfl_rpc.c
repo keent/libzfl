@@ -486,8 +486,6 @@ zfl_rpc_destroy (zfl_rpc_t **self_p)
     assert (stop_request);
     zfl_msg_push (stop_request, "stop");
     zfl_msg_send (&stop_request, self->ctrl_socket);
-
-    zfl_thread_wait (self->thread);
     zfl_thread_destroy (&self->thread);
 
     zmq_close (self->data_socket);
