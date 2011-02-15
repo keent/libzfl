@@ -4,7 +4,7 @@
     Runs all selftests.
 
     -------------------------------------------------------------------------
-    Copyright (c) 1991-2010 iMatix Corporation <www.imatix.com>
+    Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
     Copyright other contributors as noted in the AUTHORS file.
 
     This file is part of the ZeroMQ Function Library: http://zfl.zeromq.org
@@ -27,6 +27,7 @@
 #include "../include/zfl_prelude.h"
 #include "../include/zfl_base.h"
 #include "../include/zfl_blob.h"
+#include "../include/zfl_clock.h"
 #include "../include/zfl_config.h"
 #include "../include/zfl_config_json.h"
 #include "../include/zfl_config_zpl.h"
@@ -51,6 +52,7 @@ int main (int argc, char *argv [])
 
     printf ("Running ZFL self tests...\n");
 
+/*
     zfl_base_test (verbose);
     zfl_blob_test (verbose);
     zfl_config_test (verbose);
@@ -62,6 +64,8 @@ int main (int argc, char *argv [])
     zfl_msg_test (verbose);
     zfl_rpc_test (verbose);
     zfl_rpcd_test (verbose);
+*/
+    zfl_clock_test (verbose);
     zfl_thread_test (verbose);
 
     printf ("Tests passed OK\n");

@@ -1,0 +1,51 @@
+zfl_clock(7)
+===========
+
+
+NAME
+----
+zfl_clock - use timers and dates
+
+
+SYNOPSIS
+--------
+----
+zfl_clock_t *
+    zfl_clock_new (void);
+void
+    zfl_clock_destroy (zfl_clock_t **self_p);
+void
+    zfl_clock_sleep (zfl_clock_t *self, uint msecs);
+int
+    zfl_clock_test (Bool verbose);
+----
+
+DESCRIPTION
+-----------
+Provides a portable API to non-portable date and time functions such as
+sub-second sleeping and sub-second precision clocks.
+
+
+EXAMPLE
+-------
+.From zfl_clock_test method
+----
+zfl_clock_t
+	*clock;
+
+clock = zfl_clock_new ();
+assert (clock);
+
+//  Sleep for various msec pauses
+zfl_clock_sleep (clock, 0);
+zfl_clock_sleep (clock, 100);
+
+zfl_clock_destroy (&clock);
+assert (clock == NULL);
+----
+
+
+SEE ALSO
+--------
+linkzfl:zfl[7]
+

@@ -14,7 +14,7 @@
     - 'fixes' various older platforms to make them more POSIX compatible
 
     -------------------------------------------------------------------------
-    Copyright (c) 1991-2010 iMatix Corporation <www.imatix.com>
+    Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
     Copyright other contributors as noted in the AUTHORS file.
 
     This file is part of the ZeroMQ Function Library: http://zfl.zeromq.org
@@ -456,10 +456,10 @@ typedef enum {
     typedef unsigned long ulong;
     typedef unsigned int  uint;
     typedef __int64 int64_t;
-   typedef unsigned __int64 uint64_t;
+    typedef unsigned __int64 uint64_t;
 #elif (defined (__VMS__))
     typedef __int64 int64_t;
-   typedef unsigned __int64 uint64_t;
+    typedef unsigned __int64 uint64_t;
 #endif
 
 //  POSIX functions that are mispronounced in various dialects

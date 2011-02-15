@@ -2,7 +2,7 @@
     zfl_thread.h - work with operating system threads
 
     -------------------------------------------------------------------------
-    Copyright (c) 1991-2010 iMatix Corporation <www.imatix.com>
+    Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
     Copyright other contributors as noted in the AUTHORS file.
 
     This file is part of the ZeroMQ Function Library: http://zfl.zeromq.org
@@ -38,8 +38,6 @@ void
     zfl_thread_destroy (zfl_thread_t **self_p);
 int
     zfl_thread_wait (zfl_thread_t *self);
-int
-    zfl_thread_cancel (zfl_thread_t *self);
 int
     zfl_thread_test (Bool verbose);
 

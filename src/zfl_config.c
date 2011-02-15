@@ -1,12 +1,12 @@
 /*  =========================================================================
-    zfl_config.c
+    zfl_config.c - work with configuration files
 
     Loads a configuration file formatted in JSON or in ZPL format as defined
     by rfc.zeromq.org/spec:4/zpl. Provides methods to navigate this data and
     access property values. See zfl_config.c for examples of use.
 
     -------------------------------------------------------------------------
-    Copyright (c) 1991-2010 iMatix Corporation <www.imatix.com>
+    Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
     Copyright other contributors as noted in the AUTHORS file.
 
     This file is part of the ZeroMQ Function Library: http://zfl.zeromq.org

@@ -1,5 +1,5 @@
 #!/bin/sh
-#   Copyright (c) 1991-2010 iMatix Corporation and contributors
+#   Copyright (c) 1991-2011 iMatix Corporation and contributors
 #
 #   This file is part of ZFL, the 0MQ Function Library.
 #

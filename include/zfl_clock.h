@@ -1,5 +1,5 @@
 /*  =========================================================================
-    zfl.h - ZFL wrapper
+    zfl_clock.h - use timers and dates
 
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
@@ -22,30 +22,27 @@
     =========================================================================
 */
 
-#ifndef __ZFL_H_INCLUDED__
-#define __ZFL_H_INCLUDED__
+#ifndef __ZFL_CLOCK_H_INCLUDED__
+#define __ZFL_CLOCK_H_INCLUDED__
 
-//  Always include ZeroMQ header file
-//
-#include <zmq.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-//  Set up environment for the application
-//
-#include <zfl_prelude.h>
+//  Opaque class structure
+typedef struct _zfl_clock_t zfl_clock_t;
 
-//  Classes listed in alphabetical order except for dependencies
-//
-#include <zfl_base.h>
-#include <zfl_blob.h>
-#include <zfl_clock.h>
-#include <zfl_config.h>
-#include <zfl_config_json.h>
-#include <zfl_config_zpl.h>
-#include <zfl_device.h>
-#include <zfl_hash.h>
-#include <zfl_list.h>
-#include <zfl_msg.h>
-#include <zfl_rpc.h>
-#include <zfl_rpcd.h>
+zfl_clock_t *
+    zfl_clock_new (void);
+void
+    zfl_clock_destroy (zfl_clock_t **self_p);
+void
+    zfl_clock_sleep (zfl_clock_t *self, uint msecs);
+int
+    zfl_clock_test (Bool verbose);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
