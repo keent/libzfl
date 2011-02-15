@@ -38,6 +38,8 @@ void
     zfl_clock_destroy (zfl_clock_t **self_p);
 void
     zfl_clock_sleep (zfl_clock_t *self, uint msecs);
+uint64_t
+    zfl_clock_now (zfl_clock_t *self);
 int
     zfl_clock_test (Bool verbose);
 

@@ -74,6 +74,7 @@ zfl_clock_destroy (zfl_clock_t **self_p)
 void
 zfl_clock_sleep (zfl_clock_t *self, uint msecs)
 {
+    assert (self);
 #if defined (__UNIX__)
     struct timespec t;
     t.tv_sec = msecs / 1000;
@@ -84,7 +85,29 @@ zfl_clock_sleep (zfl_clock_t *self, uint msecs)
 #else
 #   error "Platform not supported by zfl_clock class"
 #endif
+}
+
+
+//  --------------------------------------------------------------------------
+//  Return current system time in microseconds. Returns the date and time in
+//  a 64-bit integer that can be used in calculations. You can use this for
+//  system level work. The actual resolution of the system clock depends on
+//  the OS. For Linux, it is microseconds. For Windows, milliseconds.
+
+uint64_t
+zfl_clock_now (zfl_clock_t *self)
+{
     assert (self);
+#if (defined (__UNIX__))
+    struct timeval tv;
+    int rc = gettimeofday (&tv, NULL);
+    assert (rc == 0);
+    return (uint64_t) tv.tv_sec * 1000000 + tv.tv_usec;
+#elif (defined (__WINDOWS__))
+    SYSTEMTIME st;
+    GetSystemTime (&st);
+    return (uint64_t) st.wSecond * 1000000 + st.wMilliseconds * 1000;
+#endif
 }
 
 
@@ -103,7 +126,11 @@ zfl_clock_test (Bool verbose)
 
     //  Sleep for various msec pauses
     zfl_clock_sleep (clock, 0);
+    uint64_t before = zfl_clock_now (clock);
     zfl_clock_sleep (clock, 100);
+    zfl_clock_sleep (clock, 1);
+    uint64_t after = zfl_clock_now (clock);
+    assert (after - before > 100);
 
     zfl_clock_destroy (&clock);
     assert (clock == NULL);

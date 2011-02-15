@@ -26,6 +26,7 @@
 
 #include <zmq.h>
 #include "../include/zfl_prelude.h"
+#include "../include/zfl_clock.h"
 #include "../include/zfl_hash.h"
 #include "../include/zfl_list.h"
 #include "../include/zfl_msg.h"
@@ -85,36 +86,16 @@ struct client {
 
 
 //  --------------------------------------------------------------------------
-//  Return current time (in microseconds)
-//	This code should go into a zfl_time class
-
-static uint64_t
-s_now (void)
-{
-#if (defined (__UNIX__))
-    struct timeval tv;
-    int rc = gettimeofday (&tv, NULL);
-    assert (rc == 0);
-    return (uint64_t) tv.tv_sec * 1000000 + tv.tv_usec;
-#elif (defined (__WINDOWS__))
-    SYSTEMTIME st;
-    GetSystemTime (&st);
-    return (uint64_t) st.wSecond * 1000000 + st.wMilliseconds * 1000;
-#else
-#   error "zfl_rpc does not compile on this system"
-#endif
-}
-
-
-//  --------------------------------------------------------------------------
 //  Creates new client
 
 static struct client *
 s_client_new (char *id)
 {
     struct client *client = (struct client *) zmalloc (sizeof (struct client));
+    zfl_clock_t *clock = zfl_clock_new ();
     client->client_id = strdup (id);
-    client->timestamp = s_now ();
+    client->timestamp = zfl_clock_now (clock);
+    zfl_clock_destroy (&clock);
     return client;
 }
 
@@ -162,9 +143,11 @@ s_frontend_event (rpcd_t *rpcd)
         zfl_msg_wrap (msg, client_id, "");
         zfl_msg_send (&msg, rpcd->frontend);
     }
-    client->timestamp = s_now ();
+    zfl_clock_t *clock = zfl_clock_new ();
+    client->timestamp = zfl_clock_now (clock);
     zfl_list_remove (rpcd->clients, client);
     zfl_list_append (rpcd->clients, client);
+    zfl_clock_destroy (&clock);
     free (client_id);
 }
 
@@ -273,6 +256,7 @@ s_rpcd_thread (void *arg)
     //  How long to wait while polling. The actual value
     //  is recalculated in the loop below.
     long poll_timeout = -1;
+    zfl_clock_t *clock = zfl_clock_new ();
 
     while (!stopped) {
         zmq_pollitem_t items [] = {
@@ -298,7 +282,7 @@ s_rpcd_thread (void *arg)
             stopped = s_control_event (rpcd);
 
         //  get current time
-        uint64_t now = s_now ();
+        uint64_t now = zfl_clock_now (clock);
 
         while (zfl_list_size (rpcd->clients) > 0) {
             struct client *client = (struct client *) zfl_list_first (rpcd->clients);
@@ -328,6 +312,7 @@ s_rpcd_thread (void *arg)
             poll_timeout = (long) (now + HEARTBEAT_INTERVAL - client->timestamp);
         }
     }
+    zfl_clock_destroy (&clock);
 
     //  Close sockets
     zmq_close (rpcd->frontend);

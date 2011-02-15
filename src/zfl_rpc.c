@@ -27,6 +27,7 @@
 
 #include <zmq.h>
 #include "../include/zfl_prelude.h"
+#include "../include/zfl_clock.h"
 #include "../include/zfl_hash.h"
 #include "../include/zfl_list.h"
 #include "../include/zfl_msg.h"
@@ -119,28 +120,6 @@ typedef struct {
 
 
 //  --------------------------------------------------------------------------
-//  Return current time (in microseconds)
-//	This code should go into a zfl_time class
-
-static uint64_t
-s_now (void)
-{
-#if (defined (__UNIX__))
-    struct timeval tv;
-    int rc = gettimeofday (&tv, NULL);
-    assert (rc == 0);
-    return (uint64_t) tv.tv_sec * 1000000 + tv.tv_usec;
-#elif (defined (__WINDOWS__))
-    SYSTEMTIME st;
-    GetSystemTime (&st);
-    return (uint64_t) st.wSecond * 1000000 + st.wMilliseconds * 1000;
-#else
-#   error "zfl_rpc does not compile on this system"
-#endif
-}
-
-
-//  --------------------------------------------------------------------------
 //  Handle message received from a server
 
 static void
@@ -162,7 +141,9 @@ s_backend_event (rpc_t *rpc)
             zfl_list_append (rpc->lru_queue, server);
             server->alive = 1;
         }
-        server->heartbeat_deadline = s_now () + HEARTBEAT_INTERVAL;
+        zfl_clock_t *clock = zfl_clock_new ();
+        server->heartbeat_deadline = zfl_clock_now (clock) + HEARTBEAT_INTERVAL;
+        zfl_clock_destroy (&clock);
         zfl_list_append (rpc->alive_servers, server);
     }
     else
@@ -311,7 +292,8 @@ s_rpc_thread (void *arg)
     rpc->registry = zfl_hash_new ();
     assert (rpc->registry);
 
-    rpc->next_heartbeat = s_now ();
+    zfl_clock_t *clock = zfl_clock_new ();
+    rpc->next_heartbeat = zfl_clock_now (clock);
 
     //  Controls how long we wait for message. Updated during processing.
     long poll_timeout = -1;
@@ -342,7 +324,7 @@ s_rpc_thread (void *arg)
             stopped = s_control_event (rpc);
 
         //  Get current time
-        uint64_t now = s_now ();
+        uint64_t now = zfl_clock_now (clock);
 
         //  Time for heartbeat?
         if (now >= rpc->next_heartbeat) {
@@ -411,6 +393,7 @@ s_rpc_thread (void *arg)
                     poll_timeout = (long) (rpc->processing_deadline - now);
         }
     }
+    zfl_clock_destroy (&clock);
 
     //  Close sockets
     zmq_close (rpc->frontend);
