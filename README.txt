@@ -104,6 +104,7 @@ These are the existing ZFL classes:
 
 * zfl_base - base class for ZFL
 * zfl_blob - binary long object
+* zfl_clock - system timer & date functions
 * zfl_config - work with configuration files
 * zfl_device - configure a device or device socket
 * zfl_hash - expandable hash table container

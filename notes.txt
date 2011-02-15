@@ -1,7 +1,5 @@
-zfl_thread class
-    - replace non-portable pthread calls in portable code
-    - zfl_thread_new, zfl_thread_exit, zfl_thread_wait
-
+zfl_process class
+    - start, monitor, stop processes
 
 zfl_socket class
     - allow configuration and tuning via ZDCF
@@ -26,7 +24,3 @@ zfl_socket class
 zfl_queue class
     - manage queue of zfl_msg items
 
-
-Building on Windows
-- MSVC requires /TP switch to handle C99 constructs in ZFL code
-- all allocations need explicit cast to destination type
