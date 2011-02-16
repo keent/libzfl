@@ -432,8 +432,10 @@ zfl_hash_test (int verbose)
     for (iteration = 0; iteration < 1000000; iteration++)
         value = zfl_hash_lookup (hash, "DEADBEEFABADCAFE");
 
+    //  Destructor should be safe to call twice
     zfl_hash_destroy (&hash);
-
+    zfl_hash_destroy (&hash);
     assert (hash == NULL);
+
     printf ("OK\n");
 }

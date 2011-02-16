@@ -170,13 +170,25 @@ zfl_config_json_file (char *filename)
 int
 zfl_config_json_test (Bool verbose)
 {
+    zfl_config_t *config;
+
     printf (" * zfl_config_json: ");
 
-    zfl_config_t *config = zfl_config_json_file ("zfl_config_test.json");
+    config = zfl_config_json_file ("zfl_config_test.json");
+    assert (config);
+
     if (verbose) {
         puts ("");
         zfl_config_save (config, "-");
     }
+    zfl_config_destroy (&config);
+
+    //  Try a non-existent file
+    config = zfl_config_json_file ("does_not_exist");
+    assert (config == NULL);
+
+    //  Try with some invalid JSON data
+    config = zfl_config_json ("<?xml><hello><world/></hello>");
     zfl_config_destroy (&config);
 
     printf ("OK\n");

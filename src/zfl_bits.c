@@ -1,5 +1,5 @@
 /*  =========================================================================
-    zfl_bits.c - base class for ZFL
+    zfl_bits.c - bits class for ZFL
 
     Provides manual template for new classes, and canonical style guidelines
     for all ZFL source code.
@@ -100,17 +100,19 @@ int
 zfl_bits_test (Bool verbose)
 {
     zfl_bits_t
-        *base;
+        *bits;
 
     printf (" * zfl_bits: ");
-    base = zfl_bits_new ();
-    assert (base);
+    bits = zfl_bits_new ();
+    assert (bits);
 
-    zfl_bits_filler_set (base, 123);
-    assert (zfl_bits_filler (base) == 123);
+    zfl_bits_filler_set (bits, 123);
+    assert (zfl_bits_filler (bits) == 123);
 
-    zfl_bits_destroy (&base);
-    assert (base == NULL);
+    //  Destructor should be safe to call twice
+    zfl_bits_destroy (&bits);
+    zfl_bits_destroy (&bits);
+    assert (bits == NULL);
 
     printf ("OK\n");
     return 0;

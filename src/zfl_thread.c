@@ -63,11 +63,11 @@ unsigned __stdcall s_call_thread_fn (void *args)
 
 //  --------------------------------------------------------------------------
 //  Constructor - create a new thread
-//  
+//
 //  Takes the same arguments as the POSIX pthread_create call. Returns a new
 //  zfl_thread_t object which you use for subsequent work with this thread.
 //  Child threads are started with the same priority as the calling thread.
-//  Returns NULL if it was not possible to create the thread. 
+//  Returns NULL if it was not possible to create the thread.
 
 zfl_thread_t *
 zfl_thread_new (void *(*thread_fn) (void *), void *args)
@@ -126,7 +126,7 @@ zfl_thread_destroy (zfl_thread_t **self_p)
 
 //  --------------------------------------------------------------------------
 //  Wait for thread to complete. This method pauses execution of the calling
-//  thread indefinitely, until the specified thread has finished. Returns 
+//  thread indefinitely, until the specified thread has finished. Returns
 //  zero if successful, -1 if there was an error.
 
 int
@@ -161,7 +161,7 @@ s_test_thread (void *args_ptr)
 {
     zfl_clock_t
         *clock = zfl_clock_new ();
-    s_thread_args_t 
+    s_thread_args_t
         *args = (s_thread_args_t *) args_ptr;
 
     if (args->verbose) {
@@ -219,10 +219,13 @@ zfl_thread_test (Bool verbose)
     thread = zfl_thread_new (s_test_thread, &args4);
     assert (thread);
     zfl_clock_sleep (clock, 100);
+    zfl_clock_destroy (&clock);
+
+    //  Destructor should be safe to call twice
+    zfl_thread_destroy (&thread);
     zfl_thread_destroy (&thread);
     assert (thread == NULL);
 
-    zfl_clock_destroy (&clock);
 
     printf ("OK\n");
     return 0;

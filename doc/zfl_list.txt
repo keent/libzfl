@@ -33,7 +33,9 @@ void
 
 DESCRIPTION
 -----------
-Singly-linked list container.
+Provides a generic container implementing a fast singly-linked list. You
+can use this to construct multi-dimensional lists, and other structures
+together with other generic containers like zfl_hash.
 
 
 EXAMPLE

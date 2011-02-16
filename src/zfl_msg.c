@@ -537,11 +537,13 @@ zfl_msg_test (int verbose)
     assert (zfl_msg_parts (zmsg) == 0);
     free (part);
 
-    zfl_msg_destroy (&zmsg);
-    assert (zmsg == NULL);
-
     zmq_close (input);
     zmq_close (output);
+
+    //  Destructor should be safe to call twice
+    zfl_msg_destroy (&zmsg);
+    zfl_msg_destroy (&zmsg);
+    assert (zmsg == NULL);
 
     printf ("OK\n");
     zmq_term (context);

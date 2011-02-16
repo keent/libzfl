@@ -1,7 +1,9 @@
 /*  =========================================================================
-    zfl_list.h - singly-linked list container
+    zfl_list.c - singly-linked list container
 
-    Singly-linked list container.
+    Provides a generic container implementing a fast singly-linked list. You
+    can use this to construct multi-dimensional lists, and other structures
+    together with other generic containers like zfl_hash.
 
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
@@ -246,7 +248,10 @@ zfl_list_test (int verbose)
     zfl_list_remove (list, wine);
     assert (zfl_list_size (list) == 0);
 
+    //  Destructor should be safe to call twice
+    zfl_list_destroy (&list);
     zfl_list_destroy (&list);
     assert (list == NULL);
+
     printf ("OK\n");
 }

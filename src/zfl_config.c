@@ -478,7 +478,11 @@ zfl_config_test (Bool verbose)
     //  Test loading from a ZPL file
     config = zfl_config_load ("zfl_config_test.txt");
     assert (config);
+
+    //  Destructor should be safe to call twice
     zfl_config_destroy (&config);
+    zfl_config_destroy (&config);
+    assert (config == NULL);
 
     printf ("OK\n");
     return 0;

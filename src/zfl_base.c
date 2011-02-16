@@ -109,6 +109,8 @@ zfl_base_test (Bool verbose)
     zfl_base_filler_set (base, 123);
     assert (zfl_base_filler (base) == 123);
 
+    //  Destructor should be safe to call twice
+    zfl_base_destroy (&base);
     zfl_base_destroy (&base);
     assert (base == NULL);
 

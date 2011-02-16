@@ -488,6 +488,8 @@ zfl_rpcd_test (Bool verbose)
 
     //  Don't actually wait for input since the client won't be there
 
+    //  Destructor should be safe to call twice
+    zfl_rpcd_destroy (&rpcd);
     zfl_rpcd_destroy (&rpcd);
     assert (rpcd == NULL);
 

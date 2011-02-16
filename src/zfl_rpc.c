@@ -539,6 +539,8 @@ zfl_rpc_test (Bool verbose)
 
     //  Don't actually send any data since the server won't be there
 
+    //  Destructor should be safe to call twice
+    zfl_rpc_destroy (&rpc);
     zfl_rpc_destroy (&rpc);
     assert (rpc == NULL);
 

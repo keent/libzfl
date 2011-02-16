@@ -86,8 +86,9 @@ zfl_blob_load (zfl_blob_t *self, FILE *file)
         size;                   //  Size of file data
 
     //  Get current position in file so we can come back here afterwards
-    posn = ftell (file);
-    if (fseek (file, 0, SEEK_END) == 0) {
+    if (file)
+        posn = ftell (file);
+    if (file && fseek (file, 0, SEEK_END) == 0) {
         //  Now determine actual size of blob in file
         size = ftell (file);
         assert (size >= 0);
@@ -117,10 +118,12 @@ zfl_blob_load (zfl_blob_t *self, FILE *file)
 
 //  --------------------------------------------------------------------------
 //  Sets blob data as specified.  Always appends a null byte to the data.
-//  Data is copied to blob. Use like this:
+//  Data is copied to blob. If data is null and size is zero, clears blob.
+//  Use like this:
 //
 //      zfl_blob_set_data (blob, buffer, size);
 //      zfl_blob_set_data (blob, object, sizeof (*object));
+//      zfl_blob_set_data (blob, NULL, 0);
 
 int
 zfl_blob_set_data (zfl_blob_t *self, byte *data, size_t size)
@@ -198,13 +201,23 @@ zfl_blob_test (Bool verbose)
         *file;
 
     printf (" * zfl_blob: ");
+
+    //  Try to load blob from missing file
     blob = zfl_blob_new (NULL, 0);
     assert (blob);
     assert (zfl_blob_size (blob) == 0);
+    size_t size = zfl_blob_load (blob, NULL);
+    assert (size == 0);
+    zfl_blob_set_data (blob, NULL, 0);
+    assert (zfl_blob_size (blob) == 0);
+    zfl_blob_destroy (&blob);
 
+    //  Load blob from existing file
+    blob = zfl_blob_new (NULL, 0);
     file = fopen ("zfl_blob.c", "r");
     assert (file);
-    assert (zfl_blob_load (blob, file));
+    size = zfl_blob_load (blob, file);
+    assert (size);
     fclose (file);
 
     assert (zfl_blob_size (blob) > 0);
@@ -212,6 +225,8 @@ zfl_blob_test (Bool verbose)
     assert (zfl_blob_size (blob) == strlen (string));
     assert (streq ((char *) (zfl_blob_data (blob)), string));
 
+    //  Destructor should be safe to call twice
+    zfl_blob_destroy (&blob);
     zfl_blob_destroy (&blob);
     assert (blob == NULL);
 

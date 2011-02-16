@@ -132,6 +132,8 @@ zfl_clock_test (Bool verbose)
     uint64_t after = zfl_clock_now (clock);
     assert (after - before > 100);
 
+    //  Destructor should be safe to call twice
+    zfl_clock_destroy (&clock);
     zfl_clock_destroy (&clock);
     assert (clock == NULL);
 

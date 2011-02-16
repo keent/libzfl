@@ -19,9 +19,9 @@ ZFL is meant to be lightweight, consistent, class-based, minimalistic, highly ef
 
 ### Ownership and License
 
-ZFL is maintained by Pieter Hintjens and Martin Hurton. Its other authors and contributors are listed in the AUTHORS file. It is held by the ZeroMQ organization at github.com.
+ZFL is maintained by Pieter Hintjens and Martin Hurton (code) and Mikko Koppanen (build system). Its other authors and contributors are listed in the AUTHORS file. It is held by the ZeroMQ organization at github.com.
 
-The authors of ZFL grant you free use of this software under the terms of the GNU Lesser General Public License (LGPL). For details see the files `COPYING` and `COPYING.LESSER` in this directory.
+The authors of ZFL grant you use of this software under the terms of the GNU Lesser General Public License (LGPL). For details see the files `COPYING` and `COPYING.LESSER` in this directory.
 
 ### Contributing
 
@@ -273,12 +273,25 @@ If you define a new ZFL class `myclass` you need to:
 * Add a reference documentation to 'doc/zfl_myclass.txt'.
 * Add myclass to 'src/Makefile.am` and `doc/Makefile.am`.
 
+The `bin/newclass.sh` shell script will automate these steps for you.
+
 ### Coding Style
 
-In general the zfl_base class defines the style for the whole library. The overriding rule for coding style is consistency. We use the C99 standard for syntax including principally:
+In general the zfl_base class defines the style for the whole library. The overriding rules for coding style are consistency, clarity, and ease of maintenance. We use the C99 standard for syntax including principally:
 
 * The // comment style.
-* Variables mixed with code.
+* Variables definitions placed in or before the code that uses them.
+
+So while ANSI C code might say:
+
+    zfl_blob_t *file_buffer;       /*  Buffer for our file */
+    ... (100 lines of code)
+    file_buffer = zfl_blob_new ();
+    ...
+
+The style in ZFL would be:
+
+    zfl_blob_t *file_buffer = zfl_blob_new ();
 
 ### Assertions
 

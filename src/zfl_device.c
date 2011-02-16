@@ -349,8 +349,11 @@ zfl_device_test (Bool verbose)
     assert (backend);
     zmq_close (backend);
 
+    //  Destructor should be safe to call twice
+    zfl_device_destroy (&device);
     zfl_device_destroy (&device);
     assert (device == NULL);
+
     printf ("OK\n");
     return 0;
 }
