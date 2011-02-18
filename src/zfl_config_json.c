@@ -33,8 +33,6 @@
 
 //  Import the cJSON library
 #include "import/cJSON/cJSON.h"
-#include "import/cJSON/cJSON.c"
-
 
 //  Load one JSON element, recursively
 //

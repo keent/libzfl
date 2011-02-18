@@ -19,7 +19,8 @@ include_HEADERS = \
     ../include/zfl_msg.h \
     ../include/zfl_rpc.h \
     ../include/zfl_rpcd.h \
-    ../include/zfl_thread.h
+    ../include/zfl_thread.h \
+    import/cJSON/cJSON.h
 
 libzfl_la_SOURCES = \
     zfl_base.c \
@@ -35,16 +36,20 @@ libzfl_la_SOURCES = \
     zfl_msg.c \
     zfl_rpc.c \
     zfl_rpcd.c \
-    zfl_thread.c
+    zfl_thread.c \
+    import/cJSON/cJSON.c
 
 INCLUDES = -I$(top_srcdir)/include
 bin_PROGRAMS = zfl_selftest
-zfl_selftest_LDADD = $(top_builddir)/src/libzfl.la
+zfl_selftest_LDADD = libzfl.la
 zfl_selftest_SOURCES = zfl_selftest.c
 
 if ON_MINGW
-libzfl_la_LDFLAGS = -no-undefined -avoid-version -version-info @LTVER@ @LIBZFL_EXTRA_LDFLAGS@
+libzfl_la_LDFLAGS = -no-undefined -avoid-version -version-info @LTVER@
 else
-libzfl_la_LDFLAGS = -version-info @LTVER@ @LIBZFL_EXTRA_LDFLAGS@
+libzfl_la_LDFLAGS = -version-info @LTVER@
 endif
+
+TESTS = zfl_selftest
+
 
