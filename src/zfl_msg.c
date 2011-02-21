@@ -173,6 +173,7 @@ zfl_msg_dup (zfl_msg_t *self)
 //  Receive message from socket
 //  Creates a new message and returns it
 //  Blocks on recv if socket is not ready for input
+//  Returns null if there is an error on the socket (e.g. ETERM)
 
 zfl_msg_t *
 zfl_msg_recv (void *socket)
@@ -188,7 +189,8 @@ zfl_msg_recv (void *socket)
         if (zmq_recv (socket, &message, 0)) {
             if (errno != ETERM)
                 printf ("E: %s\n", zmq_strerror (errno));
-            exit (1);
+            zfl_msg_destroy (&self);
+            return (NULL);
         }
         //  We handle 0MQ UUIDs as printable strings
         byte *data = (byte *) zmq_msg_data (&message);

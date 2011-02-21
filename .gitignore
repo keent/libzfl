@@ -29,6 +29,7 @@ src/platform.h
 src/platform.h.in
 src/platform.h.in~
 src/*.lo
+src/malloc.txt
 examples/*.o
 examples/zdevice
 examples/.deps/
