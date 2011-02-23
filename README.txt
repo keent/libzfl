@@ -190,9 +190,9 @@ No model is fully consistent, and classes can define their own rules if it helps
 
 * Some classes may not be opaque. For example, we have cases of generated serialization classes that encode and decode structures to/from binary buffers. It feels clumsy to have to use methods to access the properties of these classes.
 
-* While every class has a _new method that is the formal constructor, some methods may also act as constructors. For example, a "dup" method might take one object and return a second object.
+* While every class has a new method that is the formal constructor, some methods may also act as constructors. For example, a "dup" method might take one object and return a second object.
 
-* While every class has a _destroy method that is the formal destructor, some methods may also act as destructors. For example, a method that sends an object may also destroy the object (so that ownership of any buffers can passed to background threads). Such methods take the same "pointer to a reference" argument as the _destroy method.
+* While every class has a destroy method that is the formal destructor, some methods may also act as destructors. For example, a method that sends an object may also destroy the object (so that ownership of any buffers can passed to background threads). Such methods take the same "pointer to a reference" argument as the destroy method.
 
 ### Naming Style
 
