@@ -77,9 +77,10 @@ zfl_clock_sleep (zfl_clock_t *self, uint msecs)
     assert (self);
 #if defined (__UNIX__)
     struct timespec t;
-    t.tv_sec = msecs / 1000;
-    t.tv_nsec = msecs * 1000000;
-    nanosleep (&t, NULL);
+    t.tv_sec  =  msecs / 1000;
+    t.tv_nsec = (msecs % 1000) * 1000000;
+    int rc = nanosleep (&t, NULL);
+    assert (rc == 0);
 #elif defined (__WINDOWS__)
     Sleep (msecs);
 #else
