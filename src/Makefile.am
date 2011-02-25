@@ -36,8 +36,9 @@ libzfl_la_SOURCES = \
     zfl_msg.c \
     zfl_rpc.c \
     zfl_rpcd.c \
-    zfl_thread.c \
-    import/cJSON/cJSON.c
+    zfl_thread.c
+
+EXTRA_libzfl_la_SOURCES = import/cJSON/cJSON.c
 
 INCLUDES = -I$(top_srcdir)/include
 bin_PROGRAMS = zfl_selftest
