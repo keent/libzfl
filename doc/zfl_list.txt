@@ -22,6 +22,8 @@ void
     zfl_list_append (zfl_list_t *self, void *value);
 void
     zfl_list_push (zfl_list_t *self, void *value);
+void *
+    zfl_list_pop (zfl_list_t *self);
 void
     zfl_list_remove (zfl_list_t *self, void *value);
 zfl_list_t *

@@ -153,6 +153,27 @@ zfl_list_push (zfl_list_t *self, void *value)
 
 
 //  --------------------------------------------------------------------------
+//  Remove value from the beginning of the list, returns NULL if none
+
+void *
+zfl_list_pop (zfl_list_t *self)
+{
+    struct node_t *node = self->head;
+    void *value = NULL;
+    if (node) {
+        value = node->value;
+        self->head = node->next;
+        if (self->tail == node)
+            self->tail = NULL;
+    }
+    free (node);
+    self->size--;
+    self->cursor = NULL;
+    return value;
+}
+
+
+//  --------------------------------------------------------------------------
 //  Remove the value value from the list. The value must be stored in the list.
 //  The function does not deallocate the memory pointed to by the removed value.
 
@@ -264,13 +285,13 @@ zfl_list_test (int verbose)
     assert (zfl_list_size (list) == 3);
     assert (zfl_list_first (list) == bread);
 
-    zfl_list_remove (list, bread);
-    assert (zfl_list_first (list) == cheese);
-
-    zfl_list_remove (list, cheese);
-    assert (zfl_list_first (list) == wine);
-
-    zfl_list_remove (list, wine);
+    char *item;
+    item = zfl_list_pop (list);
+    assert (item == bread);
+    item = zfl_list_pop (list);
+    assert (item == cheese);
+    item = zfl_list_pop (list);
+    assert (item == wine);
     assert (zfl_list_size (list) == 0);
 
     //  Destructor should be safe to call twice
