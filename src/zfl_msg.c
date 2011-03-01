@@ -355,7 +355,7 @@ zfl_msg_push (zfl_msg_t *self, char *part)
     memmove (&self->_part_size [1], &self->_part_size [0],
         (ZFL_MSG_MAX_PARTS - 1) * sizeof (size_t));
     s_set_part (self, 0, (byte *) part, strlen (part));
-    self->_part_count += 1;
+    self->_part_count++;
 }
 
 
@@ -377,6 +377,20 @@ zfl_msg_pop (zfl_msg_t *self)
         (ZFL_MSG_MAX_PARTS - 1) * sizeof (size_t));
     self->_part_count--;
     return part;
+}
+
+
+//  --------------------------------------------------------------------------
+//  Append message part to end of message parts
+
+void
+zfl_msg_append (zfl_msg_t *self, char *part)
+{
+    assert (self);
+    assert (part);
+    assert (self->_part_count < ZFL_MSG_MAX_PARTS - 1);
+    s_set_part (self, self->_part_count, (void *) part, strlen (part));
+    self->_part_count++;
 }
 
 
@@ -477,10 +491,10 @@ zfl_msg_test (int verbose)
     void *context = zmq_init (1);
 
     void *output = zmq_socket (context, ZMQ_XREQ);
-   rc = zmq_bind (output, "tcp://*:5055");
+    rc = zmq_bind (output, "tcp://*:5055");
     assert (rc == 0);
     void *input = zmq_socket (context, ZMQ_XREP);
-   rc = zmq_connect (input, "tcp://localhost:5055");
+    rc = zmq_connect (input, "tcp://localhost:5055");
     assert (rc == 0);
 
     //  Test send and receive of single-part message
@@ -538,6 +552,12 @@ zfl_msg_test (int verbose)
     assert (strcmp (part, "World") == 0);
     assert (zfl_msg_parts (zmsg) == 0);
     free (part);
+
+    //  Check append method
+    zfl_msg_append (zmsg, "Hello");
+    zfl_msg_append (zmsg, "World!");
+    assert (zfl_msg_parts (zmsg) == 2);
+    assert (strcmp (zfl_msg_body (zmsg), "World!") == 0);
 
     zmq_close (input);
     zmq_close (output);

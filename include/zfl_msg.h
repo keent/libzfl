@@ -56,6 +56,8 @@ void
     zfl_msg_push (zfl_msg_t *self, char *part);
 char
     *zfl_msg_pop (zfl_msg_t *self);
+void
+    zfl_msg_append (zfl_msg_t *self, char *part);
 char
     *zfl_msg_address (zfl_msg_t *self);
 void
