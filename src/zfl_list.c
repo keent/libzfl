@@ -43,6 +43,8 @@ struct node_t {
 struct _zfl_list {
     struct node_t
         *head, *tail;
+    struct node_t
+        *cursor;
     size_t
         size;
 };
@@ -81,14 +83,32 @@ zfl_list_destroy (zfl_list_t **self_p)
 
 //  --------------------------------------------------------------------------
 //  Return the value at the head of list. If the list is empty, returns NULL.
-//  Note that this function does not remove the value from the list.
+//  Leaves cursor pointing at the head item, or NULL if the list is empty.
 
 void *
 zfl_list_first (zfl_list_t *self)
 {
     assert (self);
+    self->cursor = self->head;
     if (self->head)
         return self->head->value;
+    else
+        return NULL;
+}
+
+
+//  --------------------------------------------------------------------------
+//  Return the next value. If the list is empty, returns NULL. To move to
+//  the start of the list call zfl_list_first(). Advances the cursor.
+
+void *
+zfl_list_next (zfl_list_t *self)
+{
+    assert (self);
+    if (self->cursor)
+        self->cursor = self->cursor->next;
+    if (self->cursor)
+        return self->cursor->value;
     else
         return NULL;
 }
@@ -110,6 +130,7 @@ zfl_list_append (zfl_list_t *self, void *value)
     self->tail = node;
     node->next = NULL;
     self->size++;
+    self->cursor = NULL;
 }
 
 
@@ -127,6 +148,7 @@ zfl_list_push (zfl_list_t *self, void *value)
     if (self->tail == NULL)
         self->tail = node;
     self->size++;
+    self->cursor = NULL;
 }
 
 
@@ -146,7 +168,6 @@ zfl_list_remove (zfl_list_t *self, void *value)
         prev = node;
     }
     assert (node);
-
     if (prev)
         prev->next = node->next;
     else
@@ -157,6 +178,7 @@ zfl_list_remove (zfl_list_t *self, void *value)
 
     free (node);
     self->size--;
+    self->cursor = NULL;
 }
 
 
@@ -215,7 +237,10 @@ zfl_list_test (int verbose)
     assert (zfl_list_size (list) == 3);
 
     assert (zfl_list_first (list) == cheese);
+    assert (zfl_list_next (list) == bread);
+    assert (zfl_list_next (list) == wine);
     assert (zfl_list_size (list) == 3);
+
     zfl_list_remove (list, wine);
     assert (zfl_list_size (list) == 2);
 

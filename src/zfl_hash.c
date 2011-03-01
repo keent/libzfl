@@ -1,5 +1,5 @@
 /*  =========================================================================
-    zfl_hash.h - hash table
+    zfl_hash - hash table
 
     Expandable hash table container
 

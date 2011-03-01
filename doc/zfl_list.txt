@@ -16,6 +16,8 @@ void
     zfl_list_destroy (zfl_list_t **self_p);
 void *
     zfl_list_first (zfl_list_t *self);
+void *
+    zfl_list_next (zfl_list_t *self);
 void
     zfl_list_append (zfl_list_t *self, void *value);
 void
