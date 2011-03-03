@@ -32,6 +32,11 @@
 #include "../include/zfl_config_json.h"
 
 //  Import the cJSON library
+//  Note that we import like this so that the cJSON sources are not visible
+//  in the build system; this reduces the risk that ZFL users will use the
+//  cJSON functions directly, giving us the freedom to use a different JSON
+//  library in the future.
+
 #include "import/cJSON/cJSON.h"
 #include "import/cJSON/cJSON.c"
 
