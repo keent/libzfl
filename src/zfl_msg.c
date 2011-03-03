@@ -352,9 +352,9 @@ zfl_msg_push (zfl_msg_t *self, char *part)
 
     //  Move part stack up one element and insert new part
     memmove (&self->_part_data [1], &self->_part_data [0],
-        (ZFL_MSG_MAX_PARTS - 1) * sizeof (byte *));
+        self->_part_count * sizeof (unsigned char *));
     memmove (&self->_part_size [1], &self->_part_size [0],
-        (ZFL_MSG_MAX_PARTS - 1) * sizeof (size_t));
+        self->_part_count * sizeof (size_t));
     s_set_part (self, 0, (byte *) part, strlen (part));
     self->_part_count++;
 }
@@ -372,11 +372,11 @@ zfl_msg_pop (zfl_msg_t *self)
 
     //  Remove first part and move part stack down one element
     char *part = (char *) self->_part_data [0];
-    memmove (&self->_part_data [0], &self->_part_data [1],
-        (ZFL_MSG_MAX_PARTS - 1) * sizeof (byte *));
-    memmove (&self->_part_size [0], &self->_part_size [1],
-        (ZFL_MSG_MAX_PARTS - 1) * sizeof (size_t));
     self->_part_count--;
+    memmove (&self->_part_data [0], &self->_part_data [1],
+        self->_part_count * sizeof (unsigned char *));
+    memmove (&self->_part_size [0], &self->_part_size [1],
+        self->_part_count * sizeof (size_t));
     return part;
 }
 
