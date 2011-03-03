@@ -174,8 +174,8 @@ zfl_list_pop (zfl_list_t *self)
 
 
 //  --------------------------------------------------------------------------
-//  Remove the value value from the list. The value must be stored in the list.
-//  The function does not deallocate the memory pointed to by the removed value.
+//  Remove the value from the list, if present. Safe to call on values that
+//  are not in the list.
 
 void
 zfl_list_remove (zfl_list_t *self, void *value)
@@ -188,18 +188,19 @@ zfl_list_remove (zfl_list_t *self, void *value)
             break;
         prev = node;
     }
-    assert (node);
-    if (prev)
-        prev->next = node->next;
-    else
-        self->head = node->next;
+    if (node) {
+        if (prev)
+            prev->next = node->next;
+        else
+            self->head = node->next;
 
-    if (node->next == NULL)
-        self->tail = prev;
+        if (node->next == NULL)
+            self->tail = prev;
 
-    free (node);
-    self->size--;
-    self->cursor = NULL;
+        free (node);
+        self->size--;
+        self->cursor = NULL;
+    }
 }
 
 

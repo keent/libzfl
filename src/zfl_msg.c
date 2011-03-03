@@ -46,15 +46,17 @@ struct _zfl_msg_t {
 
 
 //  --------------------------------------------------------------------------
-//  Constructor
+//  Constructor with optional message body
 
 zfl_msg_t *
-zfl_msg_new (void)
+zfl_msg_new (char *body)
 {
     zfl_msg_t
         *self;
 
     self = (zfl_msg_t *) zmalloc (sizeof (zfl_msg_t));
+    if (body)
+        zfl_msg_body_set (self, body);
     return self;
 }
 
@@ -156,7 +158,7 @@ zfl_msg_t *
 zfl_msg_dup (zfl_msg_t *self)
 {
     assert (self);
-    zfl_msg_t *dup = zfl_msg_new ();
+    zfl_msg_t *dup = zfl_msg_new (NULL);
     assert (dup);
 
     uint part_nbr;
@@ -180,7 +182,7 @@ zfl_msg_recv (void *socket)
 {
     assert (socket);
 
-    zfl_msg_t *self = zfl_msg_new ();
+    zfl_msg_t *self = zfl_msg_new (NULL);
     while (1) {
         assert (self->_part_count < ZFL_MSG_MAX_PARTS);
 
@@ -450,6 +452,8 @@ zfl_msg_unwrap (zfl_msg_t *self)
 void
 zfl_msg_dump (zfl_msg_t *self)
 {
+    assert (self);
+
     uint part_nbr;
     for (part_nbr = 0; part_nbr < self->_part_count; part_nbr++) {
         byte  *data = self->_part_data [part_nbr];
@@ -498,9 +502,8 @@ zfl_msg_test (int verbose)
     assert (rc == 0);
 
     //  Test send and receive of single-part message
-    zmsg = zfl_msg_new ();
+    zmsg = zfl_msg_new ("Hello");
     assert (zmsg);
-    zfl_msg_body_set (zmsg, "Hello");
     assert (strcmp (zfl_msg_body (zmsg), "Hello") == 0);
     zfl_msg_send (&zmsg, output);
     assert (zmsg == NULL);
@@ -515,10 +518,9 @@ zfl_msg_test (int verbose)
     assert (zmsg == NULL);
 
     //  Test send and receive of multi-part message
-    zmsg = zfl_msg_new ();
-    zfl_msg_body_set (zmsg, "Hello");
-    zfl_msg_wrap     (zmsg, "address1", "");
-    zfl_msg_wrap     (zmsg, "address2", NULL);
+    zmsg = zfl_msg_new ("Hello");
+    zfl_msg_wrap (zmsg, "address1", "");
+    zfl_msg_wrap (zmsg, "address2", NULL);
     assert (zfl_msg_parts (zmsg) == 4);
     zfl_msg_send (&zmsg, output);
 

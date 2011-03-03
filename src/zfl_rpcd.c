@@ -402,9 +402,7 @@ zfl_rpcd_destroy (zfl_rpcd_t **self_p)
         return;
 
     //  Send 'stop' request to the RPC thread
-    zfl_msg_t *stop_msg = zfl_msg_new ();
-    assert (stop_msg);
-    zfl_msg_push (stop_msg, "stop");
+    zfl_msg_t *stop_msg = zfl_msg_new ("stop");
     zfl_msg_send (&stop_msg, self->ctrl_socket);
     zfl_thread_destroy (&self->thread);
 
@@ -429,8 +427,7 @@ zfl_rpcd_bind (zfl_rpcd_t *self, char *endpoint)
     if (!self)
         return;
 
-    zfl_msg_t *bind_req = zfl_msg_new ();
-    assert (bind_req);
+    zfl_msg_t *bind_req = zfl_msg_new (NULL);
     zfl_msg_push (bind_req, endpoint);
     zfl_msg_push (bind_req, "bind");
     zfl_msg_send (&bind_req, self->ctrl_socket);

@@ -33,7 +33,7 @@ extern "C" {
 typedef struct _zfl_msg_t zfl_msg_t;
 
 zfl_msg_t *
-    zfl_msg_new (void);
+    zfl_msg_new (char *body);
 void
     zfl_msg_destroy (zfl_msg_t **self_p);
 zfl_msg_t *

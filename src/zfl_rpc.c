@@ -220,8 +220,7 @@ s_control_event (rpc_t *rpc)
         zfl_list_append (rpc->servers, server);
 
         //  Send response
-        zfl_msg_t *response = zfl_msg_new ();
-        zfl_msg_push (response, "ok");
+        zfl_msg_t *response = zfl_msg_new ("ok");
         zfl_msg_send (&response, rpc->control);
         free (server_id);
         free (endpoint);
@@ -246,8 +245,7 @@ s_send_heartbeat (rpc_t *rpc)
         zfl_list_remove (servers, server);
 
         //  Prepare and send out heartbeat message
-        zfl_msg_t *msg = zfl_msg_new ();
-        assert (msg);
+        zfl_msg_t *msg = zfl_msg_new (NULL);
         zfl_msg_wrap (msg, server->server_id, "");
         zfl_msg_send (&msg, rpc->backend);
     }
@@ -351,10 +349,9 @@ s_rpc_thread (void *arg)
         if (rpc->request && !rpc->current_server) {
             if (zfl_list_size (rpc->lru_queue) > 0) {
                 server_t *server = (server_t *) zfl_list_first (rpc->lru_queue);
-                zfl_msg_t *msg = zfl_msg_new ();
 
                 //  Copy the request without address envelope
-                zfl_msg_body_set (msg, zfl_msg_body (rpc->request));
+                zfl_msg_t *msg = zfl_msg_new (zfl_msg_body (rpc->request));
 
                 //  Add request ID
                 char request_id [16];
@@ -465,9 +462,7 @@ zfl_rpc_destroy (zfl_rpc_t **self_p)
     if (!self)
         return;
 
-    zfl_msg_t *stop_request = zfl_msg_new ();
-    assert (stop_request);
-    zfl_msg_push (stop_request, "stop");
+    zfl_msg_t *stop_request = zfl_msg_new ("stop");
     zfl_msg_send (&stop_request, self->ctrl_socket);
     zfl_thread_destroy (&self->thread);
 
@@ -486,8 +481,7 @@ zfl_rpc_destroy (zfl_rpc_t **self_p)
 void
 zfl_rpc_connect (zfl_rpc_t *self, char *server_id, char *endpoint)
 {
-    zfl_msg_t *msg = zfl_msg_new ();
-    assert (msg);
+    zfl_msg_t *msg = zfl_msg_new (NULL);
     zfl_msg_push (msg, endpoint);
     zfl_msg_push (msg, server_id);
     zfl_msg_push (msg, "connect");
