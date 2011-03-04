@@ -52,6 +52,18 @@ AC_PROG_AWK
 # Checks for libraries.
 AC_CHECK_LIB([pthread], [pthread_create])
 
+AC_ARG_WITH(gcov, [AS_HELP_STRING([--with-gcov=yes/no],
+                  [With GCC Code Coverage reporting.])],
+                  [ZFL_GCOV="$withval"])
+                  
+if test "x${ZFL_GCOV}" == "xyes"; then
+    CFLAGS="-O0 -g -fprofile-arcs -ftest-coverage"
+    
+    if test "x${ZFL_ORIG_CFLAGS}" != "xnone"; then
+        CFLAGS="${CFLAGS} ${ZFL_ORIG_CFLAGS}"
+    fi
+fi
+
 # zmq location
 AC_ARG_WITH([zeromq],
             [AS_HELP_STRING([--with-zeromq],
@@ -65,18 +77,6 @@ if test "x$zfl_search_zeromq" = "xyes"; then
         LDFLAGS="-L${with_zeromq}/lib ${LDFLAGS}"
     else
         AC_MSG_ERROR([${with_zeromq}/include/zmq.h not found. Please check ZeroMQ prefix])
-    fi
-fi
-
-AC_ARG_WITH(gcov, [AS_HELP_STRING([--with-gcov=yes/no],
-                  [With GCC Code Coverage reporting.])],
-                  [ZFL_GCOV="$withval"])
-                  
-if test "x${ZFL_GCOV}" == "xyes"; then
-    CFLAGS="-O0 -g -fprofile-arcs -ftest-coverage"
-    
-    if test "x${ZFL_ORIG_CFLAGS}" != "xnone"; then
-        CFLAGS="${CFLAGS} ${ZFL_ORIG_CFLAGS}"
     fi
 fi
 
