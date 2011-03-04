@@ -47,14 +47,13 @@ ZFL uses autotools for packaging. To build from git (all example commands are fo
     sudo make install
     sudo ldconfig
 
-You will need the pkg-config, libtool, and autoreconf packages. Set the LD_LIBRARY_PATH to /usr/local/libs unless you install elsewhere. On FreeBSD, you may need to specify the default directories for configure:
+You will need the libtool and autotools packages. On FreeBSD, you may need to specify the default directories for configure:
 
-    CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure
+    ./configure --with-zeromq=/usr/local
 
 After building, you can run the ZFL selftests:
 
-    cd src
-    ./zfl_selftest
+    make check
 
 ### Linking with an Application
 
