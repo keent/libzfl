@@ -13,9 +13,9 @@
 
 **<a href="#toc2-41">Using ZFL</a>**
 &emsp;<a href="#toc3-44">Building and Installing</a>
-&emsp;<a href="#toc3-66">Linking with an Application</a>
-&emsp;<a href="#toc3-77">The Class Model</a>
-&emsp;<a href="#toc3-110">ZFL Classes</a>
+&emsp;<a href="#toc3-65">Linking with an Application</a>
+&emsp;<a href="#toc3-76">The Class Model</a>
+&emsp;<a href="#toc3-109">ZFL Classes</a>
 &emsp;<a href="#toc3-126">Predefined Macros</a>
 &emsp;<a href="#toc3-167">Error Handling</a>
 
@@ -30,12 +30,12 @@
 
 **<a href="#toc2-283">Under the Hood</a>**
 &emsp;<a href="#toc3-286">Adding a New Class</a>
-&emsp;<a href="#toc3-297">Coding Style</a>
-&emsp;<a href="#toc3-305">Assertions</a>
-&emsp;<a href="#toc3-323">Documentation</a>
-&emsp;<a href="#toc3-328">Porting ZFL</a>
-&emsp;<a href="#toc3-341">Memory Leak Testing</a>
-&emsp;<a href="#toc3-354">This Document</a>
+&emsp;<a href="#toc3-299">Coding Style</a>
+&emsp;<a href="#toc3-318">Assertions</a>
+&emsp;<a href="#toc3-336">Documentation</a>
+&emsp;<a href="#toc3-341">Porting ZFL</a>
+&emsp;<a href="#toc3-354">Memory Leak Testing</a>
+&emsp;<a href="#toc3-367">This Document</a>
 
 <A name="toc2-11" title="Overview" />
 ## Overview
@@ -52,9 +52,9 @@ ZFL is meant to be lightweight, consistent, class-based, minimalistic, highly ef
 <A name="toc3-23" title="Ownership and License" />
 ### Ownership and License
 
-ZFL is maintained by Pieter Hintjens and Martin Hurton. Its other authors and contributors are listed in the AUTHORS file. It is held by the ZeroMQ organization at github.com.
+ZFL is maintained by Pieter Hintjens and Martin Hurton (code) and Mikko Koppanen (build system). Its other authors and contributors are listed in the AUTHORS file. It is held by the ZeroMQ organization at github.com.
 
-The authors of ZFL grant you free use of this software under the terms of the GNU Lesser General Public License (LGPL). For details see the files `COPYING` and `COPYING.LESSER` in this directory.
+The authors of ZFL grant you use of this software under the terms of the GNU Lesser General Public License (LGPL). For details see the files `COPYING` and `COPYING.LESSER` in this directory.
 
 <A name="toc3-30" title="Contributing" />
 ### Contributing
@@ -83,16 +83,15 @@ ZFL uses autotools for packaging. To build from git (all example commands are fo
     sudo make install
     sudo ldconfig
 
-You will need the pkg-config, libtool, and autoreconf packages. Set the LD_LIBRARY_PATH to /usr/local/libs unless you install elsewhere. On FreeBSD, you may need to specify the default directories for configure:
+You will need the libtool and autotools packages. On FreeBSD, you may need to specify the default directories for configure:
 
-    CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure
+    ./configure --with-zeromq=/usr/local
 
 After building, you can run the ZFL selftests:
 
-    cd src
-    ./zfl_selftest
+    make check
 
-<A name="toc3-66" title="Linking with an Application" />
+<A name="toc3-65" title="Linking with an Application" />
 ### Linking with an Application
 
 Include `zfl.h` in your application and link with libzfl. Here is a typical gcc link command:
@@ -103,7 +102,7 @@ You should read `zfl.h`. This file includes `zmq.h` and the system header files 
 
     c -lzfl -lzmq -l myapp
 
-<A name="toc3-77" title="The Class Model" />
+<A name="toc3-76" title="The Class Model" />
 ### The Class Model
 
 ZFL consists of classes, each class consisting of a .h and a .c. Classes may depend on other classes.
@@ -136,13 +135,14 @@ Private/static functions in a class are named `s_functionname` and are not expor
 
 All classes have a test method called `zfl_classname_test`.
 
-<A name="toc3-110" title="ZFL Classes" />
+<A name="toc3-109" title="ZFL Classes" />
 ### ZFL Classes
 
 These are the existing ZFL classes:
 
 * zfl_base - base class for ZFL
 * zfl_blob - binary long object
+* zfl_clock - system timer & date functions
 * zfl_config - work with configuration files
 * zfl_device - configure a device or device socket
 * zfl_hash - expandable hash table container
@@ -323,15 +323,28 @@ If you define a new ZFL class `myclass` you need to:
 * Add a reference documentation to 'doc/zfl_myclass.txt'.
 * Add myclass to 'src/Makefile.am` and `doc/Makefile.am`.
 
-<A name="toc3-297" title="Coding Style" />
+The `bin/newclass.sh` shell script will automate these steps for you.
+
+<A name="toc3-299" title="Coding Style" />
 ### Coding Style
 
-In general the zfl_base class defines the style for the whole library. The overriding rule for coding style is consistency. We use the C99 standard for syntax including principally:
+In general the zfl_base class defines the style for the whole library. The overriding rules for coding style are consistency, clarity, and ease of maintenance. We use the C99 standard for syntax including principally:
 
 * The // comment style.
-* Variables mixed with code.
+* Variables definitions placed in or before the code that uses them.
 
-<A name="toc3-305" title="Assertions" />
+So while ANSI C code might say:
+
+    zfl_blob_t *file_buffer;       /*  Buffer for our file */
+    ... (100 lines of code)
+    file_buffer = zfl_blob_new ();
+    ...
+
+The style in ZFL would be:
+
+    zfl_blob_t *file_buffer = zfl_blob_new ();
+
+<A name="toc3-318" title="Assertions" />
 ### Assertions
 
 We use assertions heavily to catch bad argument values. The ZFL classes do not attempt to validate arguments and report errors; bad arguments are treated as fatal application programming errors.
@@ -349,12 +362,12 @@ Rather than the side-effect form:
 
 Since assertions may be removed by an optimizing compiler.
 
-<A name="toc3-323" title="Documentation" />
+<A name="toc3-336" title="Documentation" />
 ### Documentation
 
 Each ZFL class has its own man page in the doc directory. The contents of the man page are cut/paste from the class header and source files. Please maintain the doc file as you add new methods or modify the class test method (which for most classes acts as the EXAMPLE code).
 
-<A name="toc3-328" title="Porting ZFL" />
+<A name="toc3-341" title="Porting ZFL" />
 ### Porting ZFL
 
 When you try ZFL on an OS that it's not been used on (ever, or for a while), you will hit code that does not compile. In some cases the patches are trivial, in other cases (usually when porting to Windows), the work needed to build equivalent functionality may be quite heavy. In any case, the benefit is that once ported, the functionality is available to all applications.
@@ -367,7 +380,7 @@ Before attempting to patch code for portability, please read the `zfl_prelude.h`
 
 The canonical 'standard operating system' for all ZFL code is Linux, gcc, POSIX.
 
-<A name="toc3-341" title="Memory Leak Testing" />
+<A name="toc3-354" title="Memory Leak Testing" />
 ### Memory Leak Testing
 
 To test against memory leaks we use the mtrace tool under Linux. The zfl_selftest.c program calls MALLOC_TRACE, which zfl_prelude.h sets to mtrace() under Linux. This is how we build and run the selftests with mtrace:
@@ -380,7 +393,7 @@ To test against memory leaks we use the mtrace tool under Linux. The zfl_selftes
 
 Note that mtrace is not threadsafe and will not work consistently in multithreaded applications or test cases. All test cases should therefore be single-threaded.
 
-<A name="toc3-354" title="This Document" />
+<A name="toc3-367" title="This Document" />
 ### This Document
 
 This document is originally at README.txt and is built using [gitdown](http://github.com/imatix/gitdown).
