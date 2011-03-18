@@ -570,6 +570,8 @@ zfl_msg_test (int verbose)
     assert (zmsg == NULL);
 
     printf ("OK\n");
+    zmq_close (input);
+    zmq_close (output);
     zmq_term (context);
     return 0;
 }
