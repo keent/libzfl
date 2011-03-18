@@ -254,6 +254,27 @@ zfl_hash_insert (zfl_hash_t *self, char *key, void *value)
 
 
 //  --------------------------------------------------------------------------
+//  Update item into hash table with specified key and value.
+//  If key is already present, destroys old value and inserts new one.
+//  Use free_fn method to ensure deallocator is properly called on value.
+
+void
+zfl_hash_update (zfl_hash_t *self, char *key, void *value)
+{
+    assert (self);
+    assert (key);
+    item_t *item = s_item_lookup (self, key);
+    if (item) {
+        if (item->free_fn)
+            (item->free_fn) (item->value);
+        item->value = value;
+    }
+    else
+        zfl_hash_insert (self, key, value);
+}
+
+
+//  --------------------------------------------------------------------------
 //  Remove an item specified by key from the hash table. If there was no such
 //  item, this function does nothing.
 

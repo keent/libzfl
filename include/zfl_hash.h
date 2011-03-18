@@ -44,6 +44,8 @@ void
 int
     zfl_hash_insert (zfl_hash_t *self, char *key, void *value);
 void
+    zfl_hash_update (zfl_hash_t *self, char *key, void *value);
+void
     zfl_hash_delete (zfl_hash_t *self, char *key);
 void *
     zfl_hash_lookup (zfl_hash_t *self, char *key);
