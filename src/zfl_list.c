@@ -165,8 +165,8 @@ zfl_list_pop (zfl_list_t *self)
         self->head = node->next;
         if (self->tail == node)
             self->tail = NULL;
+        free (node);
     }
-    free (node);
     self->size--;
     self->cursor = NULL;
     return value;
