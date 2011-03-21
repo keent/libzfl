@@ -269,7 +269,8 @@ s_rpcd_thread (void *arg)
         };
 
         rc = zmq_poll (items, 3, poll_timeout);
-        assert (rc != -1);
+        if (rc == -1)
+            break;              //  Terminated
 
         if (items [0].revents & ZMQ_POLLIN)
             //  Either request or heartbeat
