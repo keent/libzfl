@@ -78,7 +78,10 @@ zfl_thread_new (void *(*thread_fn) (void *), void *args)
     self = (zfl_thread_t *) zmalloc (sizeof (zfl_thread_t));
 #if defined (__UNIX__)
     int rc = pthread_create (&self->thread, NULL, thread_fn, args);
-    if (rc != 0)
+    if (rc == 0)
+        //  Ensure thread memory is freed when thread exits
+        pthread_detach (self->thread);
+    else
         zfl_thread_destroy (&self);
 #elif defined (__WINDOWS__)
     self->thread_fn = thread_fn;
