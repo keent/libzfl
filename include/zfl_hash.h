@@ -29,8 +29,8 @@
 extern "C" {
 #endif
 
-//  Callback function for zfl_hash_apply method
-typedef int (zfl_hash_apply_fn) (char *key, void *value, void *argument);
+//  Callback function for zfl_hash_foreach method
+typedef int (zfl_hash_foreach_fn) (char *key, void *value, void *argument);
 //  Callback function for zfl_hash_freefn method
 typedef void (zfl_hash_free_fn) (void *data);
 
@@ -54,7 +54,7 @@ void *
 size_t
     zfl_hash_size (zfl_hash_t *self);
 int
-    zfl_hash_apply (zfl_hash_t *self, zfl_hash_apply_fn *callback, void *argument);
+    zfl_hash_foreach (zfl_hash_t *self, zfl_hash_foreach_fn *callback, void *argument);
 void
     zfl_hash_test (int verbose);
 

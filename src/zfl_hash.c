@@ -347,7 +347,7 @@ zfl_hash_size (zfl_hash_t *self)
 //  final return code from callback function (zero = success).
 
 int
-zfl_hash_apply (zfl_hash_t *self, zfl_hash_apply_fn *callback, void *argument)
+zfl_hash_foreach (zfl_hash_t *self, zfl_hash_foreach_fn *callback, void *argument)
 {
     assert (self);
     uint
