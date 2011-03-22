@@ -1,6 +1,8 @@
 /*  =========================================================================
     zfl_prelude.h - ZFL portability environment
 
+    todo: deprecated by zapi_prelude.h, which ZFL should depend on.
+
     Defines the standard preprocessing environment for C development. This
     file is largely equivalent to the prelude.h file provided by the old
     iMatix SFL library.
@@ -399,8 +401,7 @@ typedef unsigned int    qbyte;          //  Quad byte = 32 bits
 #define tblsize(x)          (sizeof (x) / sizeof ((x) [0]))
 #define tbllast(x)          (x [tblsize (x) - 1])
 
-#define within(num)         randof(num)         //  Deprecated, too obscure
-#define randof(num)         (int) (((float) num) * rand () / (RAND_MAX + 1.0))
+#define randof(num)         (int) ((float) (num) * random () / (RAND_MAX + 1.0))
 
 //  Free and duplicate string safely
 #define zfree(s)            if (s) { free (s); s = NULL; } else
@@ -609,7 +610,7 @@ typedef enum {
 
 //- Error reporting ---------------------------------------------------------
 // If the compiler is GCC or supports C99, include enclosing function
-// in iCL assertions
+// in ZFL assertions
 #if defined (__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
 #   define ZFL_ASSERT_SANE_FUNCTION    __func__
 #elif defined (__GNUC__) && (__GNUC__ >= 2)

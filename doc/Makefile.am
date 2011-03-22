@@ -18,27 +18,20 @@ MAN_DOC = $(MAN1) $(MAN3) $(MAN7)
 MAN_TXT = $(MAN1:%.1=%.txt)
 MAN_TXT += $(MAN3:%.3=%.txt)
 MAN_TXT += $(MAN7:%.7=%.txt)
-MAN_HTML = $(MAN_TXT:%.txt=%.html)
 
 if INSTALL_MAN
 dist_man_MANS = $(MAN_DOC)
 endif
 
 EXTRA_DIST = asciidoc.conf $(MAN_TXT)
-if BUILD_DOC
-EXTRA_DIST += $(MAN_HTML)
-endif
 
-MAINTAINERCLEANFILES = $(MAN_DOC) $(MAN_HTML)
+MAINTAINERCLEANFILES = $(MAN_DOC)
 
-dist-hook : $(MAN_DOC) $(MAN_HTML)
+dist-hook : $(MAN_DOC)
 
 if BUILD_DOC
-SUFFIXES=.html .txt .xml .1 .3 .7
+SUFFIXES=.txt .xml .1 .3 .7
 
-.txt.html:
-	asciidoc -d manpage -b xhtml11 -f asciidoc.conf \
-		-azfl_version=@PACKAGE_VERSION@ $<
 .txt.xml:
 	asciidoc -d manpage -b docbook -f asciidoc.conf \
 		-azfl_version=@PACKAGE_VERSION@ $<

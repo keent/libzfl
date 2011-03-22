@@ -90,8 +90,8 @@ zfl_list_first (zfl_list_t *self)
 {
     assert (self);
     self->cursor = self->head;
-    if (self->head)
-        return self->head->value;
+    if (self->cursor)
+        return self->cursor->value;
     else
         return NULL;
 }
@@ -107,6 +107,8 @@ zfl_list_next (zfl_list_t *self)
     assert (self);
     if (self->cursor)
         self->cursor = self->cursor->next;
+    else
+        self->cursor = self->head;
     if (self->cursor)
         return self->cursor->value;
     else
@@ -166,8 +168,8 @@ zfl_list_pop (zfl_list_t *self)
         if (self->tail == node)
             self->tail = NULL;
         free (node);
+        self->size--;
     }
-    self->size--;
     self->cursor = NULL;
     return value;
 }

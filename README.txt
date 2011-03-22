@@ -1,4 +1,4 @@
-.set GIT=http://github.com/zeromq/zfl
+.set GIT=https://github.com/zeromq/zfl
 .sub 0MQ=ØMQ
 
 # ZFL - 0MQ Function Library
