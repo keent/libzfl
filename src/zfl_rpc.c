@@ -25,8 +25,7 @@
     =========================================================================
 */
 
-#include <zmq.h>
-#include "../include/zfl_prelude.h"
+#include <zapi.h>
 #include "../include/zfl_clock.h"
 #include "../include/zfl_hash.h"
 #include "../include/zfl_list.h"

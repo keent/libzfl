@@ -26,7 +26,7 @@
     =========================================================================
 */
 
-#include "../include/zfl_prelude.h"
+#include <zapi.h>
 #include "../include/zfl_blob.h"
 #include "../include/zfl_config.h"
 #include "../include/zfl_config_json.h"
@@ -100,8 +100,8 @@ zfl_config_destroy (zfl_config_t **self_p)
             zfl_config_destroy (&self->next);
 
         zfl_blob_destroy (&self->blob);
-        zfree (self->name);
-        zfree (self);
+        free (self->name);
+        free (self);
         *self_p = NULL;
     }
 }
@@ -301,8 +301,8 @@ int
 zfl_config_set_name (zfl_config_t *self, char *name)
 {
     assert (self);
-    zfree (self->name);
-    self->name = zstrdup (name);
+    free (self->name);
+    self->name = strdup (name);
     return 0;
 }
 

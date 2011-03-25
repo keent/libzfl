@@ -26,7 +26,7 @@
     =========================================================================
 */
 
-#include "../include/zfl_prelude.h"
+#include <zapi.h>
 #include "../include/zfl_blob.h"
 
 //  Structure of our class
@@ -65,7 +65,7 @@ zfl_blob_destroy (zfl_blob_t **self_p)
     assert (self_p);
     if (*self_p) {
         zfl_blob_t *self = *self_p;
-        zfree (self->data);
+        free (self->data);
         free (self);
         *self_p = NULL;
     }
@@ -130,7 +130,7 @@ zfl_blob_set_data (zfl_blob_t *self, byte *data, size_t size)
 {
     assert (self);
 
-    zfree (self->data);
+    free (self->data);
     self->dptr = NULL;          //  No data reference
     self->size = size;
     if (data) {
@@ -157,7 +157,7 @@ zfl_blob_set_dptr (zfl_blob_t *self, byte *data, size_t size)
 {
     assert (self);
 
-    zfree (self->data);         //  Free any copied data
+    free (self->data);          //  Free any copied data
     self->dptr = data;          //  Hold data reference
     self->size = size;
 

@@ -25,28 +25,19 @@
 #ifndef __ZFL_H_INCLUDED__
 #define __ZFL_H_INCLUDED__
 
-//  Always include ZeroMQ header file
+//  Dependencies
 //
 #include <zmq.h>
-
-//  Set up environment for the application
-//
-#include <zfl_prelude.h>
+#include <zapi.h>
 
 //  Classes listed in alphabetical order except for dependencies
 //
 #include <zfl_base.h>
 #include <zfl_bits.h>
 #include <zfl_blob.h>
-#include <zfl_clock.h>
 #include <zfl_config.h>
 #include <zfl_config_json.h>
 #include <zfl_config_zpl.h>
 #include <zfl_device.h>
-#include <zfl_hash.h>
-#include <zfl_list.h>
-#include <zfl_msg.h>
-#include <zfl_rpc.h>
-#include <zfl_rpcd.h>
 
 #endif

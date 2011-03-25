@@ -27,8 +27,7 @@
     =========================================================================
 */
 
-#include "../include/zfl_prelude.h"
-#include "../include/zfl_clock.h"
+#include <zapi.h>
 #include "../include/zfl_thread.h"
 
 //  Structure of our class
@@ -159,8 +158,6 @@ typedef struct {
 static void *
 s_test_thread (void *args_ptr)
 {
-    zfl_clock_t
-        *clock = zfl_clock_new ();
     s_thread_args_t
         *args = (s_thread_args_t *) args_ptr;
 
@@ -168,12 +165,11 @@ s_test_thread (void *args_ptr)
         printf ("Thread %d starts...\n", args->number);
         fflush (stdout);
     }
-    zfl_clock_sleep (clock, args->delay);
+    zclock_sleep (args->delay);
     if (args->verbose) {
         printf ("Thread %d ends\n", args->number);
         fflush (stdout);
     }
-    zfl_clock_destroy (&clock);
     return NULL;
 }
 
@@ -182,8 +178,6 @@ zfl_thread_test (Bool verbose)
 {
     zfl_thread_t
         *thread;
-    zfl_clock_t
-        *clock = zfl_clock_new ();
     int rc;
 
     printf (" * zfl_thread: ");
@@ -201,7 +195,7 @@ zfl_thread_test (Bool verbose)
     s_thread_args_t args2 = { verbose, 2, 0 };
     thread = zfl_thread_new (s_test_thread, &args2);
     assert (thread);
-    zfl_clock_sleep (clock, 100);
+    zclock_sleep (100);
     rc = zfl_thread_wait (thread);
     assert (rc == 0);
     zfl_thread_destroy (&thread);
@@ -218,8 +212,7 @@ zfl_thread_test (Bool verbose)
     s_thread_args_t args4 = { verbose, 4, 0 };
     thread = zfl_thread_new (s_test_thread, &args4);
     assert (thread);
-    zfl_clock_sleep (clock, 100);
-    zfl_clock_destroy (&clock);
+    zclock_sleep (100);
 
     //  Destructor should be safe to call twice
     zfl_thread_destroy (&thread);

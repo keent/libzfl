@@ -25,7 +25,7 @@
     =========================================================================
 */
 
-#include "../include/zfl_prelude.h"
+#include <zapi.h>
 #include "../include/zfl_blob.h"
 #include "../include/zfl_config.h"
 #include "../include/zfl_config_zpl.h"
@@ -81,7 +81,7 @@ s_collect_name (char **start, int lineno)
     name [length] = 0;
     if (name [0]== '/' || name [length -1] == '/') {
         fprintf (stderr, "E: (%d) '/' not valid at name start or end\n", lineno);
-        zfree (name);
+        free (name);
     }
     return name;
 }
@@ -157,9 +157,8 @@ s_collect_value (char **start, int lineno)
         rc = s_verify_eoln (readptr, lineno);
     }
     //  If we had an error, drop value and return NULL
-    if (rc) {
-        zfree (value);
-    }
+    if (rc)
+        free (value);
     return value;
 }
 
@@ -194,12 +193,12 @@ s_process_line (zfl_config_t *root, char *start, int lineno)
             rc = -1;
         else
             rc = s_have_element (root, level, name, value, lineno);
-        zfree (value);
+        free (value);
     }
     else
         rc = s_verify_eoln (start, lineno);
 
-    zfree (name);
+    free (name);
     return rc;
 }
 

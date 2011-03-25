@@ -4,12 +4,8 @@ MAN7 = zfl.7 \
     zfl_base.7 \
     zfl_bits.7 \
     zfl_blob.7 \
-	zfl_clock.7 \
     zfl_config.7 \
     zfl_device.7 \
-    zfl_hash.7 \
-    zfl_list.7 \
-    zfl_msg.7 \
     zfl_rpc.7 \
     zfl_rpcd.7 \
     zfl_thread.7

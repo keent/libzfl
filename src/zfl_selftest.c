@@ -24,20 +24,14 @@
     =========================================================================
 */
 
-#include "../include/zfl_prelude.h"
+#include <zapi.h>
 #include "../include/zfl_base.h"
 #include "../include/zfl_bits.h"
 #include "../include/zfl_blob.h"
-#include "../include/zfl_clock.h"
 #include "../include/zfl_config.h"
 #include "../include/zfl_config_json.h"
 #include "../include/zfl_config_zpl.h"
 #include "../include/zfl_device.h"
-#include "../include/zfl_hash.h"
-#include "../include/zfl_list.h"
-#include "../include/zfl_msg.h"
-#include "../include/zfl_rpc.h"
-#include "../include/zfl_rpcd.h"
 #include "../include/zfl_thread.h"
 
 int main (int argc, char *argv [])
@@ -53,16 +47,10 @@ int main (int argc, char *argv [])
     zfl_base_test (verbose);
     zfl_bits_test (verbose);
     zfl_blob_test (verbose);
-    zfl_clock_test (verbose);
     zfl_config_test (verbose);
     zfl_config_json_test (verbose);
     zfl_config_zpl_test (verbose);
     zfl_device_test (verbose);
-    zfl_hash_test (verbose);
-    zfl_list_test (verbose);
-    zfl_msg_test (verbose);
-    zfl_rpc_test (verbose);
-    zfl_rpcd_test (verbose);
     zfl_thread_test (verbose);
 
     printf ("Tests passed OK\n");

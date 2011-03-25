@@ -25,7 +25,7 @@
     =========================================================================
 */
 
-#include "../include/zfl_prelude.h"
+#include <zapi.h>
 #include "../include/zfl_bits.h"
 
 //  Structure of our class

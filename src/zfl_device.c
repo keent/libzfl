@@ -31,8 +31,7 @@
     =========================================================================
 */
 
-#include <zmq.h>
-#include "../include/zfl_prelude.h"
+#include <zapi.h>
 #include "../include/zfl_blob.h"
 #include "../include/zfl_config.h"
 #include "../include/zfl_device.h"
