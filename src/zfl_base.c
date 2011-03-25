@@ -1,8 +1,5 @@
 /*  =========================================================================
-    zfl_base.c - base class for ZFL
-
-    Provides manual template for new classes, and canonical style guidelines
-    for all ZFL source code.
+    zfl_base - base class for ZFL
 
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
@@ -23,6 +20,14 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
     =========================================================================
+*/
+
+/*
+@header
+    Provides manual template for new classes, and canonical style guidelines
+    for all ZFL source code.
+@discuss
+@end
 */
 
 #include <zapi.h>
@@ -99,11 +104,10 @@ zfl_base_filler_set (zfl_base_t *self, int newvalue)
 int
 zfl_base_test (Bool verbose)
 {
-    zfl_base_t
-        *base;
-
     printf (" * zfl_base: ");
-    base = zfl_base_new ();
+    
+    //  @selftest
+    zfl_base_t *base = zfl_base_new ();
     assert (base);
 
     zfl_base_filler_set (base, 123);
@@ -113,6 +117,7 @@ zfl_base_test (Bool verbose)
     zfl_base_destroy (&base);
     zfl_base_destroy (&base);
     assert (base == NULL);
+    //  @end
 
     printf ("OK\n");
     return 0;

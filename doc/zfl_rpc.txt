@@ -1,11 +1,9 @@
 zfl_rpc(7)
 ==========
 
-
 NAME
 ----
-zfl_rpc - client side reliable RPC
-
+zfl_rpc - no title found
 
 SYNOPSIS
 --------
@@ -22,26 +20,21 @@ int
     zfl_rpc_test (Bool verbose);
 ----
 
-
 DESCRIPTION
 -----------
+
 Client side API for implementing reliable remote procedure calls.
 Use in conjunction with the zfl_rpcd class for the server side.
 
 
 EXAMPLE
 -------
-.Example RPC client application
+.From zfl_rpc_test method
 ----
-#include "zfl.h"
-
-int main ()
-{
     int major, minor, patch;
     zmq_version (&major, &minor, &patch);
-    printf ("0MQ version is %d.%d.%d\n", major, minor, patch);
     if ((major * 1000 + minor * 100 + patch) < 2100) {
-        printf ("E: need at least version 2.1.0\n");
+        printf ("E: need at least 0MQ version 2.1.0\n");
         exit (EXIT_FAILURE);
     }
     void *context = zmq_init (1);
@@ -49,28 +42,19 @@ int main ()
 
     zfl_rpc_t *rpc = zfl_rpc_new (context);
     assert (rpc);
-
     zfl_rpc_connect (rpc, "master", "tcp://127.0.0.1:5001");
     zfl_rpc_connect (rpc, "slave", "tcp://127.0.0.1:5002");
 
-    int request_nbr;
-    for (request_nbr = 0; request_nbr < 100; request_nbr++) {
-        zfl_msg_t *request = zfl_msg_new ();
-        assert (request);
-        zfl_msg_body_set (request, "REQ");
-        zfl_msg_t *reply = zfl_rpc_send (rpc, &request);
-        assert (reply);
-        assert (zfl_msg_parts (reply) > 0);
-        printf ("I: response received (%s)\n", zfl_msg_body (reply));
-        zfl_msg_destroy (&reply);
-    }
-    zfl_rpc_destroy (&rpc);
-    zmq_term (context);
-}
-----
+    //  Don't actually send any data since the server won't be there
 
+    //  Destructor should be safe to call twice
+    zfl_rpc_destroy (&rpc);
+    zfl_rpc_destroy (&rpc);
+    assert (rpc == NULL);
+
+    zmq_term (context);
+----
 
 SEE ALSO
 --------
 linkzfl:zfl[7]
-

@@ -1,14 +1,5 @@
 /*  =========================================================================
-    zfl_device.c
-
-    Used to configure 0MQ devices and their sockets. Takes configuration data
-    from a zfl_config object, and implements the rfc.zeromq.org/spec:5/zdcf
-    specification. Use this class to for stand-alone devices. Do not use for
-    built-in devices (i.e. which operate as threads of larger processes). See
-    examples/zdevice.c for a working example.
-
-    TODO:
-    - track open sockets and force them closed before calling zmq_term
+    zfl_device - configure 0MQ devices and their sockets
 
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
@@ -29,6 +20,17 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
     =========================================================================
+*/
+
+/*
+@header
+    Used to configure 0MQ devices and their sockets. Takes configuration data
+    from a zfl_config object, and implements the rfc.zeromq.org/spec:5/zdcf
+    specification. Use this class to for stand-alone devices. Do not use for
+    built-in devices (i.e. which operate as threads of larger processes). See
+    examples/zdevice.c for a working example.
+@discuss
+@end
 */
 
 #include <zapi.h>
@@ -317,6 +319,7 @@ zfl_device_test (Bool verbose)
 {
     printf (" * zfl_device: ");
 
+    //  @selftest
     //  Create a new device from the ZPL test file
     zfl_device_t *device = zfl_device_new ("zfl_device_test.txt");
     assert (device);
@@ -352,6 +355,7 @@ zfl_device_test (Bool verbose)
     zfl_device_destroy (&device);
     zfl_device_destroy (&device);
     assert (device == NULL);
+    //  @end
 
     printf ("OK\n");
     return 0;

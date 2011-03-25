@@ -9,7 +9,9 @@ config/
 configure
 doc/Makefile
 doc/Makefile.in
+doc/*.xml
 libtool
+images.html
 src/.deps/
 src/Makefile
 src/Makefile.in

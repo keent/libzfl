@@ -1,9 +1,5 @@
 /*  =========================================================================
-    zfl_config.c - work with configuration files
-
-    Loads a configuration file formatted in JSON or in ZPL format as defined
-    by rfc.zeromq.org/spec:4/zpl. Provides methods to navigate this data and
-    access property values. See zfl_config.c for examples of use.
+    zfl_config - work with configuration files
 
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
@@ -24,6 +20,15 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
     =========================================================================
+*/
+
+/*
+@header
+    Loads a configuration file formatted in JSON or in ZPL format as defined
+    by rfc.zeromq.org/spec:4/zpl. Provides methods to navigate this data and
+    access property values. See zfl_config.c for examples of use.
+@discuss
+@end
 */
 
 #include <zapi.h>
@@ -128,9 +133,7 @@ zfl_config_load (char *filename)
             return NULL;        //  File missing or not readable
     }
     //  Load file data into a memory blob
-    zfl_blob_t *blob = zfl_blob_new (NULL, 0);
-    assert (blob);
-    assert (zfl_blob_load (blob, file));
+    zfl_blob_t *blob = zfl_blob_load (file);
     fclose (file);
 
     //  Autodetect whether it's JSON or ZPL text
@@ -419,6 +422,9 @@ s_config_execute (zfl_config_t *self, zfl_config_fct handler, void *arg, int lev
 int
 zfl_config_test (Bool verbose)
 {
+    printf (" * zfl_config: ");
+
+    //  @selftest
     //  We create a config of this structure:
     //
     //  root
@@ -442,8 +448,6 @@ zfl_config_test (Bool verbose)
         *subscribe,
         *bind,
         *backend;
-
-    printf (" * zfl_config: ");
 
     //  Left is first child, next is next sibling
     root     = zfl_config_new ("root", NULL);
@@ -483,6 +487,7 @@ zfl_config_test (Bool verbose)
     zfl_config_destroy (&config);
     zfl_config_destroy (&config);
     assert (config == NULL);
+    //  @end
 
     printf ("OK\n");
     return 0;

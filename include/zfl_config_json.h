@@ -29,13 +29,19 @@
 extern "C" {
 #endif
 
+//  @interface
 //  Load config from JSON string
 zfl_config_t *
     zfl_config_json (char *json_string);
+
+//
 zfl_config_t *
     zfl_config_json_file (char *filename);
+
+//  Self test of this class
 int
     zfl_config_json_test (Bool verbose);
+//  @end
 
 #ifdef __cplusplus
 }

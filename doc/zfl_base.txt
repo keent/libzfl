@@ -1,52 +1,57 @@
 zfl_base(7)
 ===========
 
-
 NAME
 ----
 zfl_base - base class for ZFL
 
-
 SYNOPSIS
 --------
 ----
+//  Constructor
 zfl_base_t *
     zfl_base_new (void);
+
+//  Destructor
 void
     zfl_base_destroy (zfl_base_t **self_p);
+
+//  Example method returning property
 int
     zfl_base_filler (zfl_base_t *self);
+
+//  Example method setting property
 void
     zfl_base_filler_set (zfl_base_t *self, int newvalue);
+
+//  Self test of this class
 int
     zfl_base_test (Bool verbose);
 ----
 
 DESCRIPTION
 -----------
-Provides manual template for new classes, and canonical style guidelines for all
-ZFL source code.
+
+Provides manual template for new classes, and canonical style guidelines
+for all ZFL source code.
 
 
 EXAMPLE
 -------
 .From zfl_base_test method
 ----
-zfl_base_t
-    *base;
+    zfl_base_t *base = zfl_base_new ();
+    assert (base);
 
-base = zfl_base_new ();
-assert (base);
+    zfl_base_filler_set (base, 123);
+    assert (zfl_base_filler (base) == 123);
 
-zfl_base_filler_set (base, 123);
-assert (zfl_base_filler (base) == 123);
-
-zfl_base_destroy (&base);
-assert (base == NULL);
+    //  Destructor should be safe to call twice
+    zfl_base_destroy (&base);
+    zfl_base_destroy (&base);
+    assert (base == NULL);
 ----
-
 
 SEE ALSO
 --------
 linkzfl:zfl[7]
-

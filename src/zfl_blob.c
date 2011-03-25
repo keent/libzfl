@@ -1,9 +1,5 @@
 /*  =========================================================================
-    zfl_blob.c - binary long object
-
-    Manipulates opaque binary objects including reading and writing from/to
-    files.  Example use case is for loading config data from stdin or file
-    for processing by zfl_config.
+    zfl_blob - binary long object
 
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
@@ -24,6 +20,15 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
     =========================================================================
+*/
+
+/*
+@header
+    Manipulates opaque binary objects including reading and writing from/to
+    files.  Example use case is for loading config data from stdin or file
+    for processing by zfl_config.
+@discuss
+@end
 */
 
 #include <zapi.h>
@@ -78,13 +83,14 @@ zfl_blob_destroy (zfl_blob_t **self_p)
 //  data.  Idempotent, does not change current read position in file. If
 //  file cannot be read, returns empty blob.
 
-size_t
-zfl_blob_load (zfl_blob_t *self, FILE *file)
+zfl_blob_t *
+zfl_blob_load (FILE *file)
 {
     long
         posn,                   //  Current position in file
         size;                   //  Size of file data
 
+    zfl_blob_t *self = zfl_blob_new (NULL, 0);
     //  Get current position in file so we can come back here afterwards
     if (file)
         posn = ftell (file);
@@ -112,7 +118,7 @@ zfl_blob_load (zfl_blob_t *self, FILE *file)
     else
         zfl_blob_set_data (self, NULL, 0);
 
-    return zfl_blob_size (self);
+    return self;
 }
 
 
@@ -193,33 +199,24 @@ zfl_blob_size (zfl_blob_t *self)
 int
 zfl_blob_test (Bool verbose)
 {
-    zfl_blob_t
-        *blob;
-    char
-        *string = "This is a string";
-    FILE
-        *file;
-
     printf (" * zfl_blob: ");
 
+    //  @selftest
     //  Try to load blob from missing file
-    blob = zfl_blob_new (NULL, 0);
-    assert (blob);
+    zfl_blob_t *blob = zfl_blob_load (NULL);
     assert (zfl_blob_size (blob) == 0);
-    size_t size = zfl_blob_load (blob, NULL);
-    assert (size == 0);
     zfl_blob_set_data (blob, NULL, 0);
     assert (zfl_blob_size (blob) == 0);
     zfl_blob_destroy (&blob);
 
     //  Load blob from existing file
-    blob = zfl_blob_new (NULL, 0);
-    file = fopen ("zfl_blob.c", "r");
+    FILE *file = fopen ("zfl_blob.c", "r");
     assert (file);
-    size = zfl_blob_load (blob, file);
-    assert (size);
+    blob = zfl_blob_load (file);
+    assert (blob);
     fclose (file);
 
+    char *string = "This is a string";
     assert (zfl_blob_size (blob) > 0);
     zfl_blob_set_data (blob, (byte *) string, strlen (string));
     assert (zfl_blob_size (blob) == strlen (string));
@@ -229,6 +226,7 @@ zfl_blob_test (Bool verbose)
     zfl_blob_destroy (&blob);
     zfl_blob_destroy (&blob);
     assert (blob == NULL);
+    //  @end
 
     printf ("OK\n");
     return 0;

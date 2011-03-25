@@ -32,22 +32,39 @@ extern "C" {
 //  Opaque class structure
 typedef struct _zfl_blob_t zfl_blob_t;
 
+//  @interface
+//  Create a new blob object
 zfl_blob_t *
     zfl_blob_new (byte *data, size_t size);
+
+//  Destroy a blob object
 void
     zfl_blob_destroy (zfl_blob_t **self_p);
-size_t
-    zfl_blob_load (zfl_blob_t *self, FILE *file);
+
+//  Create a blob object loaded from a file
+zfl_blob_t *
+    zfl_blob_load (FILE *file);
+
+//  Set a blob's content, copying from a memory block
 int
     zfl_blob_set_data (zfl_blob_t *self, byte *data, size_t size);
+
+//  Set a blob's content, not copying
 int
     zfl_blob_set_dptr (zfl_blob_t *self, byte *data, size_t size);
+
+//  Return blob content reference
 byte *
     zfl_blob_data (zfl_blob_t *self);
+
+//  Return size of blob content
 size_t
     zfl_blob_size (zfl_blob_t *self);
+
+//  Self test of this class
 int
     zfl_blob_test (Bool verbose);
+//  @end
 
 #ifdef __cplusplus
 }

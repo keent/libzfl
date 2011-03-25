@@ -32,14 +32,22 @@ extern "C" {
 //  Opaque class structure
 typedef struct _zfl_thread_t zfl_thread_t;
 
+//  @interface
 zfl_thread_t *
     zfl_thread_new (void *(*thread_fn) (void *), void *args);
+
+//
 void
     zfl_thread_destroy (zfl_thread_t **self_p);
+
+//
 int
     zfl_thread_wait (zfl_thread_t *self);
+
+//  Self test of this class
 int
     zfl_thread_test (Bool verbose);
+//  @end
 
 #ifdef __cplusplus
 }

@@ -1,9 +1,5 @@
 /*  =========================================================================
-    zfl_config_json.c
-
-    Loads a JSON file into a zfl_config structure.  Does not provide detailed
-    error reporting.  To verify your JSON files use http://www.jsonlint.com.
-    This version uses the cJSON library.
+    zfl_config_json - load JSON file into zfl_config structure
 
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
@@ -24,6 +20,15 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
     =========================================================================
+*/
+
+/*
+@header
+    Loads a JSON file into a zfl_config structure.  Does not provide detailed
+    error reporting.  To verify your JSON files use http://www.jsonlint.com.
+    This version uses the cJSON library.
+@discuss
+@end
 */
 
 #include <zapi.h>
@@ -155,9 +160,7 @@ zfl_config_json_file (char *filename)
 {
     FILE *file = fopen (filename, "r");
     if (file) {
-        zfl_blob_t *blob = zfl_blob_new (NULL, 0);
-        assert (blob);
-        assert (zfl_blob_load (blob, file));
+        zfl_blob_t *blob = zfl_blob_load (file);
         fclose (file);
         zfl_config_t *config = zfl_config_json ((char *) zfl_blob_data (blob));
         zfl_blob_destroy (&blob);
@@ -174,11 +177,10 @@ zfl_config_json_file (char *filename)
 int
 zfl_config_json_test (Bool verbose)
 {
-    zfl_config_t *config;
-
     printf (" * zfl_config_json: ");
 
-    config = zfl_config_json_file ("zfl_config_test.json");
+    //  @selftest
+    zfl_config_t *config = zfl_config_json_file ("zfl_config_test.json");
     assert (config);
 
     if (verbose) {
@@ -194,6 +196,7 @@ zfl_config_json_test (Bool verbose)
     //  Try with some invalid JSON data
     config = zfl_config_json ("<?xml><hello><world/></hello>");
     zfl_config_destroy (&config);
+    //  @end
 
     printf ("OK\n");
     return 0;

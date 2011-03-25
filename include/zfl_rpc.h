@@ -31,6 +31,7 @@ extern "C" {
 
 typedef struct _zfl_rpc zfl_rpc_t;
 
+//  @interface
 zfl_rpc_t *
     zfl_rpc_new (void *zmq_context);
 void
@@ -41,6 +42,7 @@ zfl_msg_t *
     zfl_rpc_send (zfl_rpc_t *self, zfl_msg_t **request_p);
 int
     zfl_rpc_test (Bool verbose);
+//  @end
 
 #ifdef __cplusplus
 }

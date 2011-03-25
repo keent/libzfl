@@ -1,8 +1,5 @@
 /*  =========================================================================
-    zfl_bits.c - bits class for ZFL
-
-    Provides manual template for new classes, and canonical style guidelines
-    for all ZFL source code.
+    zfl_bits - bits class for ZFL
 
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
@@ -23,6 +20,14 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
     =========================================================================
+*/
+
+/*
+@header
+    Provides manual template for new classes, and canonical style guidelines
+    for all ZFL source code.
+@discuss
+@end
 */
 
 #include <zapi.h>
@@ -99,11 +104,10 @@ zfl_bits_filler_set (zfl_bits_t *self, int newvalue)
 int
 zfl_bits_test (Bool verbose)
 {
-    zfl_bits_t
-        *bits;
-
     printf (" * zfl_bits: ");
-    bits = zfl_bits_new ();
+
+    //  @selftest
+    zfl_bits_t *bits = zfl_bits_new ();
     assert (bits);
 
     zfl_bits_filler_set (bits, 123);
@@ -113,6 +117,7 @@ zfl_bits_test (Bool verbose)
     zfl_bits_destroy (&bits);
     zfl_bits_destroy (&bits);
     assert (bits == NULL);
+    //  @end
 
     printf ("OK\n");
     return 0;

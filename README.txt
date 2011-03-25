@@ -65,6 +65,18 @@ You should read `zfl.h`. This file includes `zmq.h` and the system header files 
 
     c -lzfl -lzmq -l myapp
 
+### API Summary
+
+#### zfl_xxx  - yyy
+
+.pull src/zctx.c@header,left
+
+This is the class interface:
+
+.pull include/zctx.h@interface,code
+
+.pull src/zctx.c@discuss,left
+
 ### The Class Model
 
 ZFL consists of classes, each class consisting of a .h and a .c. Classes may depend on other classes.
@@ -103,55 +115,11 @@ These are the existing ZFL classes:
 
 * zfl_base - base class for ZFL
 * zfl_blob - binary long object
-* zfl_clock - system timer & date functions
 * zfl_config - work with configuration files
+* zfl_config_json - work with JSON configuration files
+* zfl_config_zpl - work with ZPL configuration files
 * zfl_device - configure a device or device socket
-* zfl_hash - expandable hash table container
-* zfl_list - singly-linked list container
-* zfl_msg - multipart 0MQ message
-* zfl_rpcd - server side reliable RPC
-* zfl_rpc - client side reliable RPC
 * zfl_thread - work with operating system threads
-
-### Predefined Macros
-
-The file zfl_prelude.h defines a number of macros including these:
-
-    #define FOREVER             for (;;)            //  FOREVER { ... }
-    #define until(expr)         while (!(expr))     //  do { ... } until (expr)
-    #define streq(s1,s2)        (!strcmp ((s1), (s2)))
-    #define strneq(s1,s2)       (strcmp ((s1), (s2)))
-    #define strused(s)          (*(s) != 0)
-    #define strnull(s)          (*(s) == 0)
-    #define strclr(s)           (*(s) = 0)
-    #define strlast(s)          ((s) [strlen (s) - 1])
-    #define strterm(s)          ((s) [strlen (s)])
-
-    #define tblsize(x)          (sizeof (x) / sizeof ((x) [0]))
-    #define tbllast(x)          (x [tblsize (x) - 1])
-
-    #define randomof(num)       (int) (((float) num) * rand () / (RAND_MAX + 1.0))
-    #define randomize()         srand ((uint) apr_time_usec (apr_time_now ()))
-
-    #if (!defined (MIN))
-    #   define MIN(a,b)         (((a) < (b))? (a): (b))
-    #   define MAX(a,b)         (((a) > (b))? (a): (b))
-    #endif
-
-    //- Assertion that pointer value is as expect -------------------------------
-
-    #define assert_eq(value,const) \
-    if ((value) != (const)) {\
-        printf ("Assertion failed, expected=%d actual=%d", (const), (value));\
-        assert ((value) == (const));\
-    }
-
-    //- Boolean operators and constants -----------------------------------------
-
-    #if (!defined (TRUE))
-    #    define TRUE        1               //  ANSI standard
-    #    define FALSE       0
-    #endif
 
 ### Error Handling
 
@@ -201,25 +169,6 @@ ZFL aims for short, consistent names, following the theory that names we use mos
 
 And the reader can easily parse this without needing special syntax to separate the class name from the method name.
 
-### Containers
-
-After a long experiment with containers, we've decided that we need exactly two containers:
-
-* A singly-linked list.
-* A hash table using text keys.
-
-These are zfl_list and zfl_hash, respectively. Both store void pointers, with no attempt to manage the details of contained objects. You can use these containers to create lists of lists, hashes of lists, hashes of hashes, etc.
-
-We assume that at some point we'll need to switch to a doubly-linked list.
-
-### Inheritance
-
-ZFL provides two ways to do inheritance from base classes to higher level classes. First, by code copying. You may laugh but it works. The zfl_base class defines a basic syntactic structure. If we decide to change some of the ground rules shared by all classes, we modify the zfl_base class and then we manually make the same modifications in all other ZFL classes. Obviously as the number of classes in ZFL grows this becomes progressively harder, which is good: we don't want the basics to change more than they need to.
-
-The second way is by straight encapsulation. For example if I want to make a specialized container that has some intelligence about the objects it contains, I can take the list or hash class, wrap that in a new class and add the necessary code on top. There is no attempt, nor need, to export methods or properties automatically. If I want this, I do it by hand.
-
-Writing such code by hand may seem laborious but when we work with ruthlessly consistent style and semantics, it is easy, safe, and often the shortest path from problem to solution.
-
 ### Portability
 
 Creating a portable C application can be rewarding in terms of maintaining a single code base across many platforms, and keeping (expensive) system-specific knowledge separate from application developers. In most projects (like 0MQ core), there is no portability layer and application code does conditional compilation for all mixes of platforms. This leads to quite messy code.
@@ -228,8 +177,8 @@ ZFL is explicitly meant to become a portability layer, similar to but thinner th
 
 These are the places a C application is subject to arbitrary system differences:
 
-* Different compilers may offer slightly different variants of the C language, often lacking specific types or using neat non-portable names. Windows is a big culprit here. We solve this by 'patching' the language in zfl_prelude.h, e.g. defining int64_t on Windows.
-* System header files are inconsistent, i.e. you need to include different files depending on the OS type and version. We solve this by pulling in all necessary header files in zfl_prelude.h. This is a proven brute-force approach that increases recompilation times but eliminates a major source of pain.
+* Different compilers may offer slightly different variants of the C language, often lacking specific types or using neat non-portable names. Windows is a big culprit here. We solve this by 'patching' the language in zapi_prelude.h, e.g. defining int64_t on Windows.
+* System header files are inconsistent, i.e. you need to include different files depending on the OS type and version. We solve this by pulling in all necessary header files in zapi_prelude.h. This is a proven brute-force approach that increases recompilation times but eliminates a major source of pain.
 * System libraries are inconsistent, i.e. you need to link with different libraries depending on the OS type and version. We solve this with an external compilation tool, 'C', which detects the OS type and version (at runtime) and builds the necessary link commands.
 * System functions are inconsistent, i.e. you need to call different functions depending, again, on OS type and version. We solve this by building small abstract classes that handle specific areas of functionality, and doing conditional compilation in these.
 
@@ -243,7 +192,7 @@ An example of the last:
         pid = 0;
     #endif
 
-ZFL uses the GNU autotools system, so non-portable code can use the macros this defines. It can also use macros defined by the zfl_prelude.h header file.
+ZFL uses the GNU autotools system, so non-portable code can use the macros this defines. It can also use macros defined by the zapi_prelude.h header file.
 
 ### Technical Aspects
 
@@ -253,12 +202,7 @@ ZFL uses the GNU autotools system, so non-portable code can use the macros this 
 * *Performance*: for critical path processing, you may want to avoid creating and destroying classes. However on modern Linux systems the heap allocator is very fast. Individual classes can choose whether or not to nullify their data on allocation.
 * *Self-testing*: every class has a `selftest` method that runs through the methods of the class. In theory, calling all selftest functions of all classes does a full unit test of the library. The `zfl_selftest` application does this.
 * *Portability*: the ZFL library is aimed at becoming a portability layer (like Apache APR or the older iMatix SFL) but that depends on it actually being ported. See section on 'Porting ZFL' below.
-* *Memory management*: ZFL classes do not use any special memory management techiques to detect leaks. We've done this in the past but it makes the code relatively complex. Instead, we do memory leak testing using tools like mtrace:
-
-    gcc -g -o zfl_selftest zfl*.c -lzmq
-    export MALLOC_TRACE=mtrace.txt
-    zfl_selftest
-    mtrace zfl_selftest mtrace.txt
+* *Memory management*: ZFL classes do not use any special memory management techiques to detect leaks. We've done this in the past but it makes the code relatively complex. Instead, we do memory leak testing using tools like valgrind.
 
 ## Under the Hood
 
@@ -311,31 +255,19 @@ Since assertions may be removed by an optimizing compiler.
 
 ### Documentation
 
-Each ZFL class has its own man page in the doc directory. The contents of the man page are cut/paste from the class header and source files. Please maintain the doc file as you add new methods or modify the class test method (which for most classes acts as the EXAMPLE code).
+Man pages are generated from the class header and source files. Please follow the zfl_base example. Create an empty man page (.txt) in doc/ before rebuilding.
 
 ### Porting ZFL
 
 When you try ZFL on an OS that it's not been used on (ever, or for a while), you will hit code that does not compile. In some cases the patches are trivial, in other cases (usually when porting to Windows), the work needed to build equivalent functionality may be quite heavy. In any case, the benefit is that once ported, the functionality is available to all applications.
 
-Before attempting to patch code for portability, please read the `zfl_prelude.h` header file. There are several typical types of changes you may need to make to get functionality working on a specific operating system:
+Before attempting to patch code for portability, please read the `zapi_prelude.h` header file. There are several typical types of changes you may need to make to get functionality working on a specific operating system:
 
-* Defining typedefs which are missing on that specific compiler: do this in zfl_prelude.h.
-* Defining macros that rename exotic library functions to more conventional names: do this in zfl_prelude.h.
+* Defining typedefs which are missing on that specific compiler: do this in zapi_prelude.h.
+* Defining macros that rename exotic library functions to more conventional names: do this in zapi_prelude.h.
 * Reimplementing specific methods to use a non-standard API: this is typically needed on Windows. Do this in the relevant class, using #ifdefs to properly differentiate code for different platforms.
 
 The canonical 'standard operating system' for all ZFL code is Linux, gcc, POSIX.
-
-### Memory Leak Testing
-
-To test against memory leaks we use the mtrace tool under Linux. The zfl_selftest.c program calls MALLOC_TRACE, which zfl_prelude.h sets to mtrace() under Linux. This is how we build and run the selftests with mtrace:
-
-    #  Run selftests and check memory
-    gcc -g -o zfl_selftest zfl*.c -lzmq
-    export MALLOC_TRACE=mtrace.txt
-    zfl_selftest -v
-    mtrace zfl_selftest mtrace.txt
-
-Note that mtrace is not threadsafe and will not work consistently in multithreaded applications or test cases. All test cases should therefore be single-threaded.
 
 ### This Document
 

@@ -1,9 +1,6 @@
 /*  =========================================================================
     zfl_rpc.c - client side reliable RPC
 
-    Client side API for implementing reliable remote procedure calls.
-    Use in conjunction with the zfl_rpcd class for the server side.
-
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
     Copyright other contributors as noted in the AUTHORS file.
@@ -23,6 +20,14 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
     =========================================================================
+*/
+
+/*
+@header
+    Client side API for implementing reliable remote procedure calls.
+    Use in conjunction with the zfl_rpcd class for the server side.
+@discuss
+@end
 */
 
 #include <zapi.h>
@@ -512,11 +517,9 @@ zfl_rpc_send (zfl_rpc_t *self, zfl_msg_t **request_p)
 int
 zfl_rpc_test (Bool verbose)
 {
-    zfl_rpc_t
-        *rpc;
-
     printf (" * zfl_rpc: ");
 
+    //  @selftest
     int major, minor, patch;
     zmq_version (&major, &minor, &patch);
     if ((major * 1000 + minor * 100 + patch) < 2100) {
@@ -526,7 +529,7 @@ zfl_rpc_test (Bool verbose)
     void *context = zmq_init (1);
     assert (context);
 
-    rpc = zfl_rpc_new (context);
+    zfl_rpc_t *rpc = zfl_rpc_new (context);
     assert (rpc);
     zfl_rpc_connect (rpc, "master", "tcp://127.0.0.1:5001");
     zfl_rpc_connect (rpc, "slave", "tcp://127.0.0.1:5002");
@@ -539,6 +542,8 @@ zfl_rpc_test (Bool verbose)
     assert (rpc == NULL);
 
     zmq_term (context);
+    //  @end
+    
     printf ("OK\n");
     return 0;
 }

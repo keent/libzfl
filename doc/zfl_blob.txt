@@ -1,73 +1,84 @@
 zfl_blob(7)
 ===========
 
-
 NAME
 ----
 zfl_blob - binary long object
 
-
 SYNOPSIS
 --------
 ----
+//  Create a new blob object
 zfl_blob_t *
-    zfl_blob_new (void *data, size_t size);
+    zfl_blob_new (byte *data, size_t size);
+
+//  Destroy a blob object
 void
     zfl_blob_destroy (zfl_blob_t **self_p);
-size_t
-    zfl_blob_load (zfl_blob_t *self, FILE *file);
+
+//  Create a blob object loaded from a file
+zfl_blob_t *
+    zfl_blob_load (FILE *file);
+
+//  Set a blob's content, copying from a memory block
 int
-    zfl_blob_set_data (zfl_blob_t *self, void *data, size_t size);
+    zfl_blob_set_data (zfl_blob_t *self, byte *data, size_t size);
+
+//  Set a blob's content, not copying
 int
-    zfl_blob_set_dptr (zfl_blob_t *self, void *data, size_t size);
-void *
+    zfl_blob_set_dptr (zfl_blob_t *self, byte *data, size_t size);
+
+//  Return blob content reference
+byte *
     zfl_blob_data (zfl_blob_t *self);
+
+//  Return size of blob content
 size_t
     zfl_blob_size (zfl_blob_t *self);
+
+//  Self test of this class
 int
     zfl_blob_test (Bool verbose);
-
 ----
-
 
 DESCRIPTION
 -----------
-Manipulates opaque binary objects including reading and writing from/to files.
-Example use case is for loading config data from stdin or file for processing
-by zfl_config.
+
+Manipulates opaque binary objects including reading and writing from/to
+files.  Example use case is for loading config data from stdin or file
+for processing by zfl_config.
 
 
 EXAMPLE
 -------
 .From zfl_blob_test method
 ----
-zfl_blob_t
-    *blob;
-char
-    *string = "This is a string";
-FILE
-    *file;
+    //  Try to load blob from missing file
+    zfl_blob_t *blob = zfl_blob_load (NULL);
+    assert (zfl_blob_size (blob) == 0);
+    zfl_blob_set_data (blob, NULL, 0);
+    assert (zfl_blob_size (blob) == 0);
+    zfl_blob_destroy (&blob);
 
-blob = zfl_blob_new (NULL, 0);
-assert (blob);
-assert (zfl_blob_size (blob) == 0);
+    //  Load blob from existing file
+    FILE *file = fopen ("zfl_blob.c", "r");
+    assert (file);
+    blob = zfl_blob_load (file);
+    assert (blob);
+    fclose (file);
 
-file = fopen ("zfl_blob.c", "r");
-assert (file);
-assert (zfl_blob_load (blob, file));
-fclose (file);
+    char *string = "This is a string";
+    assert (zfl_blob_size (blob) > 0);
+    zfl_blob_set_data (blob, (byte *) string, strlen (string));
+    assert (zfl_blob_size (blob) == strlen (string));
+    assert (streq ((char *) (zfl_blob_data (blob)), string));
 
-assert (zfl_blob_size (blob) > 0);
-zfl_blob_set_data (blob, string, strlen (string));
-assert (zfl_blob_size (blob) == strlen (string));
-assert (streq ((char *) (zfl_blob_data (blob)), string));
-
-zfl_blob_destroy (&blob);
-assert (blob == NULL);
+    //  Destructor should be safe to call twice
+    zfl_blob_destroy (&blob);
+    zfl_blob_destroy (&blob);
+    assert (blob == NULL);
 ----
-
 
 SEE ALSO
 --------
 linkzfl:zfl[7]
-

@@ -32,22 +32,39 @@ extern "C" {
 //  Opaque class structure
 typedef struct _zfl_device_t zfl_device_t;
 
+//  @interface
+//
 zfl_device_t *
     zfl_device_new (char *filename);
+
+//
 void
     zfl_device_destroy (zfl_device_t **self_p);
+
+//
 void *
     zfl_device_context (zfl_device_t *self);
+
+//
 Bool
     zfl_device_verbose (zfl_device_t *self);
+
+//
 char *
     zfl_device_locate (zfl_device_t *self, int index);
+
+//
 char *
     zfl_device_property (zfl_device_t *self, char *device_name, char *property);
+
+//
 void *
     zfl_device_socket (zfl_device_t *self, char *device, char *socket_name, int type);
+
+//  Self test of this class
 int
     zfl_device_test (Bool verbose);
+//  @end
 
 #ifdef __cplusplus
 }

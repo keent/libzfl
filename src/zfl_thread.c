@@ -1,10 +1,5 @@
 /*  =========================================================================
-    zfl_thread.c - work with operating system threads
-
-    Provides a portable API for creating, killing, and waiting on operating
-    system threads. Used instead of pthreads, which is not portable to all
-    platforms. Does not provide a thread cancellation method since that leads
-    to unstable code. Send 0MQ messages to tell a worker thread to end.
+    zfl_thread - work with operating system threads
 
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
@@ -25,6 +20,16 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
     =========================================================================
+*/
+
+/*
+@header
+    Provides a portable API for creating, killing, and waiting on operating
+    system threads. Used instead of pthreads, which is not portable to all
+    platforms. Does not provide a thread cancellation method since that leads
+    to unstable code. Send 0MQ messages to tell a worker thread to end.
+@discuss
+@end
 */
 
 #include <zapi.h>
@@ -176,17 +181,14 @@ s_test_thread (void *args_ptr)
 int
 zfl_thread_test (Bool verbose)
 {
-    zfl_thread_t
-        *thread;
-    int rc;
-
     printf (" * zfl_thread: ");
 
+    //  @selftest
     //  Test a thread that just runs and finishes
     s_thread_args_t args1 = { verbose, 1, 100 };
-    thread = zfl_thread_new (s_test_thread, &args1);
+    zfl_thread_t *thread = zfl_thread_new (s_test_thread, &args1);
     assert (thread);
-    rc = zfl_thread_wait (thread);
+    int rc = zfl_thread_wait (thread);
     assert (rc == 0);
     zfl_thread_destroy (&thread);
     assert (thread == NULL);
@@ -218,7 +220,7 @@ zfl_thread_test (Bool verbose)
     zfl_thread_destroy (&thread);
     zfl_thread_destroy (&thread);
     assert (thread == NULL);
-
+    //  @end
 
     printf ("OK\n");
     return 0;

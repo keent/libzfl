@@ -29,13 +29,20 @@
 extern "C" {
 #endif
 
+//  @interface
+
 //  Load config from ZPL string
 zfl_config_t *
     zfl_config_zpl (char *zpl_string);
+
+//
 zfl_config_t *
     zfl_config_zpl_file (char *filename);
+
+//  Self test of this class
 int
     zfl_config_zpl_test (Bool verbose);
+//  @end
 
 #ifdef __cplusplus
 }

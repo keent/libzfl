@@ -1,50 +1,79 @@
 zfl_thread(7)
 =============
 
-
 NAME
 ----
 zfl_thread - work with operating system threads
-
 
 SYNOPSIS
 --------
 ----
 zfl_thread_t *
     zfl_thread_new (void *(*thread_fn) (void *), void *args);
+
+//
 void
     zfl_thread_destroy (zfl_thread_t **self_p);
+
+//
 int
     zfl_thread_wait (zfl_thread_t *self);
-int
-    zfl_thread_cancel (zfl_thread_t *self);
+
+//  Self test of this class
 int
     zfl_thread_test (Bool verbose);
 ----
 
-
 DESCRIPTION
 -----------
+
 Provides a portable API for creating, killing, and waiting on operating
-system threads. Used instead of, e.g., pthreads, which is not portable to
-all platforms.
+system threads. Used instead of pthreads, which is not portable to all
+platforms. Does not provide a thread cancellation method since that leads
+to unstable code. Send 0MQ messages to tell a worker thread to end.
 
 
 EXAMPLE
 -------
 .From zfl_thread_test method
 ----
-zfl_thread_t
-    *thread;
+    //  Test a thread that just runs and finishes
+    s_thread_args_t args1 = { verbose, 1, 100 };
+    zfl_thread_t *thread = zfl_thread_new (s_test_thread, &args1);
+    assert (thread);
+    int rc = zfl_thread_wait (thread);
+    assert (rc == 0);
+    zfl_thread_destroy (&thread);
+    assert (thread == NULL);
 
-thread = zfl_thread_new (test_thread, "HELLO");
-assert (thread);
-zfl_thread_wait (thread);
+    //  Test wait method on a thread that's already finished
+    s_thread_args_t args2 = { verbose, 2, 0 };
+    thread = zfl_thread_new (s_test_thread, &args2);
+    assert (thread);
+    zclock_sleep (100);
+    rc = zfl_thread_wait (thread);
+    assert (rc == 0);
+    zfl_thread_destroy (&thread);
+    assert (thread == NULL);
 
-zfl_thread_destroy (&thread);
-assert (thread == NULL);
+    //  Test destructor on thread that is still running
+    s_thread_args_t args3 = { verbose, 3, 100 };
+    thread = zfl_thread_new (s_test_thread, &args3);
+    assert (thread);
+    zfl_thread_destroy (&thread);
+    assert (thread == NULL);
+
+    //  Test destructor on thread that's already finished
+    s_thread_args_t args4 = { verbose, 4, 0 };
+    thread = zfl_thread_new (s_test_thread, &args4);
+    assert (thread);
+    zclock_sleep (100);
+
+    //  Destructor should be safe to call twice
+    zfl_thread_destroy (&thread);
+    zfl_thread_destroy (&thread);
+    assert (thread == NULL);
 ----
-
 
 SEE ALSO
 --------

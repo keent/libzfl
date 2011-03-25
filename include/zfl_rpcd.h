@@ -32,6 +32,7 @@ extern "C" {
 //  Opaque class structure
 typedef struct _zfl_rpcd zfl_rpcd_t;
 
+//  @interface
 zfl_rpcd_t *
     zfl_rpcd_new (void *zmq_context, char *server_id);
 void
@@ -44,6 +45,7 @@ void
     zfl_rpcd_send (zfl_rpcd_t *self, zfl_msg_t **msg_p);
 int
     zfl_rpcd_test (Bool verbose);
+//  @end
 
 #ifdef __cplusplus
 }

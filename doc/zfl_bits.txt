@@ -1,52 +1,57 @@
 zfl_bits(7)
 ===========
 
-
 NAME
 ----
-zfl_bits - base class for ZFL
-
+zfl_bits - bits class for ZFL
 
 SYNOPSIS
 --------
 ----
+//  Create a new bitstring object
 zfl_bits_t *
     zfl_bits_new (void);
+
+//  Destroy a bitstring object
 void
     zfl_bits_destroy (zfl_bits_t **self_p);
+
+//  Example method
 int
     zfl_bits_filler (zfl_bits_t *self);
+
+//  Example method
 void
     zfl_bits_filler_set (zfl_bits_t *self, int newvalue);
+
+//  Self test of this class
 int
     zfl_bits_test (Bool verbose);
 ----
 
 DESCRIPTION
 -----------
-Provides manual template for new classes, and canonical style guidelines for all
-ZFL source code.
+
+Provides manual template for new classes, and canonical style guidelines
+for all ZFL source code.
 
 
 EXAMPLE
 -------
 .From zfl_bits_test method
 ----
-zfl_bits_t
-    *base;
+    zfl_bits_t *bits = zfl_bits_new ();
+    assert (bits);
 
-base = zfl_bits_new ();
-assert (base);
+    zfl_bits_filler_set (bits, 123);
+    assert (zfl_bits_filler (bits) == 123);
 
-zfl_bits_filler_set (base, 123);
-assert (zfl_bits_filler (base) == 123);
-
-zfl_bits_destroy (&base);
-assert (base == NULL);
+    //  Destructor should be safe to call twice
+    zfl_bits_destroy (&bits);
+    zfl_bits_destroy (&bits);
+    assert (bits == NULL);
 ----
-
 
 SEE ALSO
 --------
 linkzfl:zfl[7]
-

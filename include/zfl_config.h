@@ -32,47 +32,86 @@ extern "C" {
 //  Opaque class structure
 typedef struct _zfl_config_t zfl_config_t;
 
+//  @interface
 //  Function that executes config
 typedef int (zfl_config_fct) (zfl_config_t *self, void *arg, int level);
 
+//
 zfl_config_t *
     zfl_config_new (char *name, zfl_config_t *parent);
+
+//
 void
     zfl_config_destroy (zfl_config_t **self_p);
+
+//
 zfl_config_t *
     zfl_config_load (char *filename);
+
+//
 int
     zfl_config_save (zfl_config_t *self, char *filename);
+
+//
 zfl_config_t *
     zfl_config_child (zfl_config_t *self);
+
+//
 zfl_config_t *
     zfl_config_next (zfl_config_t *self);
+
+//
 zfl_config_t *
     zfl_config_locate (zfl_config_t *self, char *path);
+
+//
 char *
     zfl_config_resolve (zfl_config_t *self, char *path, char *default_value);
+
+//
 zfl_config_t *
     zfl_config_at_depth (zfl_config_t *self, int level);
+
+//
 char *
     zfl_config_name (zfl_config_t *self);
+
+//
 int
     zfl_config_set_name (zfl_config_t *self, char *name);
+
+//
 zfl_blob_t *
     zfl_config_value (zfl_config_t *self);
+
+//
 int
     zfl_config_set_value (zfl_config_t *self, zfl_blob_t *blob);
+
+//
 char *
     zfl_config_string (zfl_config_t *self);
+
+//
 int
     zfl_config_set_string (zfl_config_t *self, char *string);
+
+//
 int
     zfl_config_set_printf (zfl_config_t *self, char *format, ...);
+
+//
 int
     zfl_config_execute (zfl_config_t *self, zfl_config_fct handler, void *arg);
+
+//
 int
     zfl_config_dump (zfl_config_t *self);
+
+//  Self test of this class
 int
     zfl_config_test (Bool verbose);
+//  @end
 
 #ifdef __cplusplus
 }

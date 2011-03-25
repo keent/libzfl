@@ -1,8 +1,6 @@
 /*  =========================================================================
     zfl_rpcd.c - server side reliable RPC
 
-    Server side API for implementing reliable remote procedure calls.
-
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
     Copyright other contributors as noted in the AUTHORS file.
@@ -22,6 +20,13 @@
     You should have received a copy of the GNU Lesser General Public License
     along with this program. If not, see <http://www.gnu.org/licenses/>.
     =========================================================================
+*/
+
+/*
+@header
+    Server side API for implementing reliable remote procedure calls.
+@discuss
+@end
 */
 
 #include <zapi.h>
@@ -465,11 +470,9 @@ zfl_rpcd_send (zfl_rpcd_t *self, zfl_msg_t **msg_p)
 int
 zfl_rpcd_test (Bool verbose)
 {
-    zfl_rpcd_t
-        *rpcd;
-
     printf (" * zfl_rpcd: ");
 
+    //  @selftest
     int major, minor, patch;
     zmq_version (&major, &minor, &patch);
     if ((major * 1000 + minor * 100 + patch) < 2100) {
@@ -479,7 +482,7 @@ zfl_rpcd_test (Bool verbose)
     void *context = zmq_init (1);
     assert (context);
 
-    rpcd = zfl_rpcd_new (context, "master");
+    zfl_rpcd_t *rpcd = zfl_rpcd_new (context, "master");
     assert (rpcd);
     zfl_rpcd_bind (rpcd, "tcp://*:5001");
 
@@ -491,6 +494,8 @@ zfl_rpcd_test (Bool verbose)
     assert (rpcd == NULL);
 
     zmq_term (context);
+    //  @end
+    
     printf ("OK\n");
     return 0;
 }

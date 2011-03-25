@@ -32,16 +32,27 @@ extern "C" {
 //  Opaque class structure
 typedef struct _zfl_base_t zfl_base_t;
 
+//  @interface
+//  Constructor
 zfl_base_t *
     zfl_base_new (void);
+
+//  Destructor
 void
     zfl_base_destroy (zfl_base_t **self_p);
+
+//  Example method returning property
 int
     zfl_base_filler (zfl_base_t *self);
+
+//  Example method setting property
 void
     zfl_base_filler_set (zfl_base_t *self, int newvalue);
+
+//  Self test of this class
 int
     zfl_base_test (Bool verbose);
+//  @end
 
 #ifdef __cplusplus
 }

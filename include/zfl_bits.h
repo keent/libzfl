@@ -32,16 +32,27 @@ extern "C" {
 //  Opaque class structure
 typedef struct _zfl_bits_t zfl_bits_t;
 
+//  @interface
+//  Create a new bitstring object
 zfl_bits_t *
     zfl_bits_new (void);
+
+//  Destroy a bitstring object
 void
     zfl_bits_destroy (zfl_bits_t **self_p);
+
+//  Example method
 int
     zfl_bits_filler (zfl_bits_t *self);
+
+//  Example method
 void
     zfl_bits_filler_set (zfl_bits_t *self, int newvalue);
+
+//  Self test of this class
 int
     zfl_bits_test (Bool verbose);
+//  @end
 
 #ifdef __cplusplus
 }
