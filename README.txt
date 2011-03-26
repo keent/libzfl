@@ -71,15 +71,85 @@ You should read `zfl.h`. This file includes `zmq.h` and the system header files 
 
 ### API Summary
 
-#### zfl_xxx  - yyy
+#### zfl_base - libzfl base class
 
-.pull src/zctx.c@header,left
+.pull src/zfl_base.c@header,left
 
 This is the class interface:
 
-.pull include/zctx.h@interface,code
+.pull include/zfl_base.h@interface,code
 
-.pull src/zctx.c@discuss,left
+.pull src/zfl_base.c@discuss,left
+
+#### zfl_bits - bitstring manipulation - in-progress
+
+.pull src/zfl_bits.c@header,left
+
+This is the class interface:
+
+.pull include/zfl_bits.h@interface,code
+
+.pull src/zfl_bits.c@discuss,left
+
+#### zfl_blob - work with binary long objects (blobs)
+
+.pull src/zfl_blob.c@header,left
+
+This is the class interface:
+
+.pull include/zfl_blob.h@interface,code
+
+.pull src/zfl_blob.c@discuss,left
+
+#### zfl_config - work with configuration files
+
+.pull src/zfl_config.c@header,left
+
+This is the class interface:
+
+.pull include/zfl_config.h@interface,code
+
+.pull src/zfl_config.c@discuss,left
+
+#### zfl_config_json - load JSON file into zfl_config structure
+
+.pull src/zfl_config_json.c@header,left
+
+This is the class interface:
+
+.pull include/zfl_config_json.h@interface,code
+
+.pull src/zfl_config_json.c@discuss,left
+
+#### zfl_config_zpl - load ZPL file into zfl_config structure
+
+.pull src/zfl_config_zpl.c@header,left
+
+This is the class interface:
+
+.pull include/zfl_config_zpl.h@interface,code
+
+.pull src/zfl_config_zpl.c@discuss,left
+
+#### zfl_device - configure 0MQ devices and their sockets
+
+.pull src/zfl_device.c@header,left
+
+This is the class interface:
+
+.pull include/zfl_device.h@interface,code
+
+.pull src/zfl_device.c@discuss,left
+
+#### zfl_thread - work with operating system threads
+
+.pull src/zfl_thread.c@header,left
+
+This is the class interface:
+
+.pull include/zfl_thread.h@interface,code
+
+.pull src/zfl_thread.c@discuss,left
 
 ### The Class Model
 
