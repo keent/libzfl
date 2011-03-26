@@ -1,11 +1,11 @@
 /*  =========================================================================
-    zfl_config_zpl.h - ZFL config_zpl class
+    zfl_config_zpl - load ZPL file into zfl_config structure
 
     -------------------------------------------------------------------------
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
     Copyright other contributors as noted in the AUTHORS file.
 
-    This file is part of the ZeroMQ Function Library: http://zfl.zeromq.org
+    This file is part of libzfl, http://libzfl.zeromq.org.
 
     This is free software; you can redistribute it and/or modify it under the
     terms of the GNU Lesser General Public License as published by the Free
@@ -30,12 +30,11 @@ extern "C" {
 #endif
 
 //  @interface
-
-//  Load config from ZPL string
+//  Create new zfl_config object from ZPL string
 zfl_config_t *
     zfl_config_zpl (char *zpl_string);
 
-//
+//  Create new zfl_config object from ZPL file
 zfl_config_t *
     zfl_config_zpl_file (char *filename);
 

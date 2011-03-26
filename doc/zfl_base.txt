@@ -3,7 +3,7 @@ zfl_base(7)
 
 NAME
 ----
-zfl_base - base class for ZFL
+zfl_base - libzfl base class
 
 SYNOPSIS
 --------

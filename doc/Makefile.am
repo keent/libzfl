@@ -1,10 +1,12 @@
 MAN1 =
 MAN3 =
-MAN7 = zfl.7 \
+MAN7 = libzfl.7 \
     zfl_base.7 \
     zfl_bits.7 \
     zfl_blob.7 \
     zfl_config.7 \
+    zfl_config_json.7 \
+    zfl_config_zpl.7 \
     zfl_device.7 \
     zfl_thread.7
 MAN_DOC = $(MAN1) $(MAN3) $(MAN7)

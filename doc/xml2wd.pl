@@ -1,7 +1,7 @@
 #! /bin/perl
 #
 #   xml2wd.pl - Convert docbook XML to Wikidot syntax
-#   Part of the ztools/apisite toolkit. Modified for zfl, from zapi.
+#   Part of the ztools/apisite toolkit. Modified for libzfl, from libzapi.
 #
 #   Author: Pieter Hintjens <ph@imatix.com>
 #   License: public domain
@@ -43,10 +43,10 @@ $title($volume)
 $manual - $source/$version
 [[/div]]
 END
-        if ($title eq "zfl") {
+        if ($title eq "libzfl") {
             open (TOC, ">_start.wd");
-            print TOC "[[image http://zfl.zeromq.org/local--files/admin:css/logo.gif]]\n\n";
-            print TOC "++ zfl/$version reference\n\n";
+            print TOC "[[image http://libzfl.zeromq.org/local--files/admin:css/logo.gif link=\"page:start\"]]\n\n";
+            print TOC "++ libzfl/$version reference\n\n";
             close (TOC);
         }
     }
@@ -129,6 +129,21 @@ END
                 last;
             }
         }
+        $output = "\n[[code]]\n$_\n[[/code]]\n";
+    }
+    elsif (/<screen>/) {
+        $_ = $';
+        chop while /\s$/;
+        $line = $_;
+        while (<>) {
+            chop while /\s$/;
+            $line .= "\n$_";
+            if ($line =~ /(.*)<\/screen>/s) {
+                $_ = $1;
+                last;
+            }
+        }
+        s/\/\//\\\/\\\//g;
         $output = "\n[[code]]\n$_\n[[/code]]\n";
     }
 

@@ -3,7 +3,7 @@ zfl_bits(7)
 
 NAME
 ----
-zfl_bits - bits class for ZFL
+zfl_bits - bitstring manipulation - in-progress
 
 SYNOPSIS
 --------

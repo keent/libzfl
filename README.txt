@@ -1,7 +1,7 @@
 .set GIT=https://github.com/zeromq/zfl
 .sub 0MQ=ØMQ
 
-# ZFL - 0MQ Function Library
+# libzfl - High-level C library for ØMQ
 
 ## Contents
 
@@ -11,17 +11,17 @@
 
 ### Scope and Goals
 
-ZFL is the 0MQ Function Library, a thin portability & function library for ZeroMQ applications in C/C++. It is written as clear readable C classes, portable to all 0MQ platforms, and licensed under the LGPL.
+libzfl is a thin portability & function library for ZeroMQ applications in C/C++. It is written as clear readable C classes, portable to all 0MQ platforms, and licensed under the LGPL.
 
-The main goal is to allow the construction of industrial-scale 0MQ services and devices that integrate properly with the operating system, while staying 100% portable. ZFL acts as a primary abstraction layer on top of the 0MQ API, mainly for C applications but also for other languages. ZFL is inspired by the iMatix Standard Function Library (SFL), and borrows liberally from it. See http://legacy.imatix.com/html/sfl/.
+The main goal is to allow the construction of industrial-scale 0MQ services and devices that integrate properly with the operating system, while staying 100% portable. libzfl acts as a primary abstraction layer on top of the 0MQ API, mainly for C applications but also for other languages. libzfl is inspired by the iMatix Standard Function Library (SFL), and borrows liberally from it. See http://legacy.imatix.com/html/sfl/.
 
-ZFL is meant to be lightweight, consistent, class-based, minimalistic, highly efficient, and aimed at making it faster and easier to develop realistic, secure, and portable 0MQ devices and applications.
+libzfl is meant to be lightweight, consistent, class-based, minimalistic, highly efficient, and aimed at making it faster and easier to develop realistic, secure, and portable 0MQ devices and applications.
 
 ### Ownership and License
 
-ZFL is maintained by Pieter Hintjens and Martin Hurton (code) and Mikko Koppanen (build system). Its other authors and contributors are listed in the AUTHORS file. It is held by the ZeroMQ organization at github.com.
+libzfl is maintained by Pieter Hintjens and Martin Hurton (code) and Mikko Koppanen (build system). Its other authors and contributors are listed in the AUTHORS file. It is held by the ZeroMQ organization at github.com.
 
-The authors of ZFL grant you use of this software under the terms of the GNU Lesser General Public License (LGPL). For details see the files `COPYING` and `COPYING.LESSER` in this directory.
+The authors of libzfl grant you use of this software under the terms of the GNU Lesser General Public License (LGPL). For details see the files `COPYING` and `COPYING.LESSER` in this directory.
 
 ### Contributing
 
@@ -31,16 +31,20 @@ The proper way to submit patches is to clone this repository, make your changes,
 
 All classes are maintained by a single person, who is the responsible editor for that class and who is named in the header as such. This is usually the originator of the class. When several people collaborate on a class, one single person is always the lead maintainer and the one to blame when it breaks.
 
-The general rule is, if you contribute code to ZFL you must be willing to maintain it as long as there are users of it. Code with no active maintainer will in general be deprecated and/or removed.
+The general rule is, if you contribute code to libzfl you must be willing to maintain it as long as there are users of it. Code with no active maintainer will in general be deprecated and/or removed.
 
-## Using ZFL
+## Using libzfl
+
+### Dependencies
+
+libzfl depends on libzapi (http://libzap.zeromq.org). Please build and install libzapi before building and installing libzfl.
 
 ### Building and Installing
 
-ZFL uses autotools for packaging. To build from git (all example commands are for Linux):
+libzfl uses autotools for packaging. To build from git (all example commands are for Linux):
 
-    git clone git://github.com/zeromq/zfl.git
-    cd zfl
+    git clone git://github.com/zeromq/libzfl.git
+    cd libzfl
     sh autogen.sh
     ./configure
     make all
@@ -51,7 +55,7 @@ You will need the libtool and autotools packages. On FreeBSD, you may need to sp
 
     ./configure --with-zeromq=/usr/local
 
-After building, you can run the ZFL selftests:
+After building, you can run the libzfl selftests:
 
     make check
 
@@ -79,11 +83,11 @@ This is the class interface:
 
 ### The Class Model
 
-ZFL consists of classes, each class consisting of a .h and a .c. Classes may depend on other classes.
+libzfl consists of classes, each class consisting of a .h and a .c. Classes may depend on other classes.
 
-`zfl.h` includes all classes header files, all the time. For the user, ZFL forms one single package. All classes start by including `zfl.h`. All applications that use ZFL start by including `zfl.h`. `zfl.h` also defines a limited number of small, useful macros and typedefs that have proven useful for writing clearer C code.
+`zfl.h` includes all classes header files, all the time. For the user, libzfl forms one single package. All classes start by including `zfl.h`. All applications that use libzfl start by including `zfl.h`. `zfl.h` also defines a limited number of small, useful macros and typedefs that have proven useful for writing clearer C code.
 
-The canonical example for ZFL style is the zfl_base class, which defines the template for all other classes. The nomenclature for all classes is consistent. We use zfl_base as an example:
+The canonical example for libzfl style is the zfl_base class, which defines the template for all other classes. The nomenclature for all classes is consistent. We use zfl_base as an example:
 
 * Source files: zfl_base.c, zfl_base.h
 * Methods: zfl_base_test, zfl_base_print, ...
@@ -109,11 +113,11 @@ Private/static functions in a class are named `s_functionname` and are not expor
 
 All classes have a test method called `zfl_classname_test`.
 
-### ZFL Classes
+### libzfl Classes
 
-These are the existing ZFL classes:
+These are the existing libzfl classes:
 
-* zfl_base - base class for ZFL
+* zfl_base - base class for libzfl
 * zfl_blob - binary long object
 * zfl_config - work with configuration files
 * zfl_config_json - work with JSON configuration files
@@ -139,7 +143,7 @@ The answer to this, as we learned from building enterprise-level C applications 
 
 C has no standard API style. It is one thing to write a useful component, but something else to provide an API that is consistent and obvious across many components. We learned from building [OpenAMQ](http://www.openamq.org), a messaging client and server of 0.5M LoC, that a consistent model for extending C makes life for the application developer much easier.
 
-The general model is that of a class (the source package) that provides objects (in fact C structures). The application creates objects and then works with them. When done, the application destroys the object. In C, we tend to use the same name for the object as the class, when we can, and it looks like this (to take a fictitious ZFL class):
+The general model is that of a class (the source package) that provides objects (in fact C structures). The application creates objects and then works with them. When done, the application destroys the object. In C, we tend to use the same name for the object as the class, when we can, and it looks like this (to take a fictitious libzfl class):
 
     zfl_regexp_t *regexp = zfl_regexp_new (regexp_string);
     if (!regexp)
@@ -163,7 +167,7 @@ No model is fully consistent, and classes can define their own rules if it helps
 
 ### Naming Style
 
-ZFL aims for short, consistent names, following the theory that names we use most often should be shortest. Classes get one-word names, unless they are part of a family of classes in which case they may be two words, the first being the family name. Methods, similarly, get one-word names and we aim for consistency across classes (so a method that does something semantically similar in two classes will get the same name in both). So the canonical name for any method is:
+libzfl aims for short, consistent names, following the theory that names we use most often should be shortest. Classes get one-word names, unless they are part of a family of classes in which case they may be two words, the first being the family name. Methods, similarly, get one-word names and we aim for consistency across classes (so a method that does something semantically similar in two classes will get the same name in both). So the canonical name for any method is:
 
     zfl_classname_methodname
 
@@ -173,7 +177,7 @@ And the reader can easily parse this without needing special syntax to separate 
 
 Creating a portable C application can be rewarding in terms of maintaining a single code base across many platforms, and keeping (expensive) system-specific knowledge separate from application developers. In most projects (like 0MQ core), there is no portability layer and application code does conditional compilation for all mixes of platforms. This leads to quite messy code.
 
-ZFL is explicitly meant to become a portability layer, similar to but thinner than libraries like the [Apache Portable Runtime](http://apr.apache.org) (APR).
+libzfl is explicitly meant to become a portability layer, similar to but thinner than libraries like the [Apache Portable Runtime](http://apr.apache.org) (APR).
 
 These are the places a C application is subject to arbitrary system differences:
 
@@ -192,7 +196,7 @@ An example of the last:
         pid = 0;
     #endif
 
-ZFL uses the GNU autotools system, so non-portable code can use the macros this defines. It can also use macros defined by the zapi_prelude.h header file.
+libzfl uses the GNU autotools system, so non-portable code can use the macros this defines. It can also use macros defined by the zapi_prelude.h header file.
 
 ### Technical Aspects
 
@@ -201,14 +205,14 @@ ZFL uses the GNU autotools system, so non-portable code can use the macros this 
 * *Library versioning*: we don't make any attempt to version the library at this stage. Classes are in our experience highly stable once they are built and tested, the only changes typically being added methods.
 * *Performance*: for critical path processing, you may want to avoid creating and destroying classes. However on modern Linux systems the heap allocator is very fast. Individual classes can choose whether or not to nullify their data on allocation.
 * *Self-testing*: every class has a `selftest` method that runs through the methods of the class. In theory, calling all selftest functions of all classes does a full unit test of the library. The `zfl_selftest` application does this.
-* *Portability*: the ZFL library is aimed at becoming a portability layer (like Apache APR or the older iMatix SFL) but that depends on it actually being ported. See section on 'Porting ZFL' below.
-* *Memory management*: ZFL classes do not use any special memory management techiques to detect leaks. We've done this in the past but it makes the code relatively complex. Instead, we do memory leak testing using tools like valgrind.
+* *Portability*: the libzfl library is aimed at becoming a portability layer (like Apache APR or the older iMatix SFL) but that depends on it actually being ported. See section on 'Porting libzfl' below.
+* *Memory management*: libzfl classes do not use any special memory management techiques to detect leaks. We've done this in the past but it makes the code relatively complex. Instead, we do memory leak testing using tools like valgrind.
 
 ## Under the Hood
 
 ### Adding a New Class
 
-If you define a new ZFL class `myclass` you need to:
+If you define a new libzfl class `myclass` you need to:
 
 * Write the `zfl_myclass.c` and `zfl_myclass.h` source files, in `zfl/src` and `zfl/include` respectively.
 * Add`#include <zfl_myclass.h>` to `zfl/include/zfl.h`.
@@ -232,13 +236,13 @@ So while ANSI C code might say:
     file_buffer = zfl_blob_new ();
     ...
 
-The style in ZFL would be:
+The style in libzfl would be:
 
     zfl_blob_t *file_buffer = zfl_blob_new ();
 
 ### Assertions
 
-We use assertions heavily to catch bad argument values. The ZFL classes do not attempt to validate arguments and report errors; bad arguments are treated as fatal application programming errors.
+We use assertions heavily to catch bad argument values. The libzfl classes do not attempt to validate arguments and report errors; bad arguments are treated as fatal application programming errors.
 
 We also use assertions heavily on calls to system functions that are never supposed to fail, where failure is to be treated as a fatal non-recoverable error (e.g. running out of memory).
 
@@ -255,11 +259,33 @@ Since assertions may be removed by an optimizing compiler.
 
 ### Documentation
 
-Man pages are generated from the class header and source files. Please follow the zfl_base example. Create an empty man page (.txt) in doc/ before rebuilding.
+Man pages are generated from the class header and source files via the doc/mkman tool, and similar functionality in the gitdown tool (http://github.com/imatix/gitdown). The header file for a class must wrap its interface as follows:
 
-### Porting ZFL
+    //  @interface
+    ... prototypes and public typedefs
+    //  @end
 
-When you try ZFL on an OS that it's not been used on (ever, or for a while), you will hit code that does not compile. In some cases the patches are trivial, in other cases (usually when porting to Windows), the work needed to build equivalent functionality may be quite heavy. In any case, the benefit is that once ported, the functionality is available to all applications.
+The source file for a class must provide documentation as follows:
+
+    /*  
+    @header
+    ...short explanation of class...
+    @discuss
+    ...longer discussion of how it works...
+    @end
+    */
+
+The source file for a class then provides the self test example as follows:
+
+    //  @selftest
+    ...test code and functions
+    //  @end
+
+The template for man pages is in doc/mkman.
+
+### Porting libzfl
+
+When you try libzfl on an OS that it's not been used on (ever, or for a while), you will hit code that does not compile. In some cases the patches are trivial, in other cases (usually when porting to Windows), the work needed to build equivalent functionality may be quite heavy. In any case, the benefit is that once ported, the functionality is available to all applications.
 
 Before attempting to patch code for portability, please read the `zapi_prelude.h` header file. There are several typical types of changes you may need to make to get functionality working on a specific operating system:
 
@@ -267,7 +293,7 @@ Before attempting to patch code for portability, please read the `zapi_prelude.h
 * Defining macros that rename exotic library functions to more conventional names: do this in zapi_prelude.h.
 * Reimplementing specific methods to use a non-standard API: this is typically needed on Windows. Do this in the relevant class, using #ifdefs to properly differentiate code for different platforms.
 
-The canonical 'standard operating system' for all ZFL code is Linux, gcc, POSIX.
+The canonical 'standard operating system' for all libzfl code is Linux, gcc, POSIX.
 
 ### This Document
 

@@ -5,7 +5,7 @@
     Copyright (c) 1991-2011 iMatix Corporation <www.imatix.com>
     Copyright other contributors as noted in the AUTHORS file.
 
-    This file is part of the ZeroMQ Function Library: http://zfl.zeromq.org
+    This file is part of libzfl, http://libzfl.zeromq.org.
 
     This is free software; you can redistribute it and/or modify it under the
     terms of the GNU Lesser General Public License as published by the Free
@@ -25,7 +25,7 @@
 /*
 @header
     Loads a ZPL property set as defined at http://rfc.zeromq.org/spec:4 into
-    a zfl_config_t structure.  This code would be a LOT shorter in Perl :-)
+    a new zfl_config_t structure. This code would be a LOT shorter in Perl.
 @discuss
 @end
 */

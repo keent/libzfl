@@ -1,0 +1,56 @@
+zfl_config_json(7)
+==================
+
+NAME
+----
+zfl_config_json - load JSON file into zfl_config structure
+
+SYNOPSIS
+--------
+----
+//  Create new zfl_config object from JSON string
+zfl_config_t *
+    zfl_config_json (char *json_string);
+
+//  Create new zfl_config object from JSON file
+zfl_config_t *
+    zfl_config_json_file (char *filename);
+
+//  Self test of this class
+int
+    zfl_config_json_test (Bool verbose);
+----
+
+DESCRIPTION
+-----------
+
+Loads a JSON file into a zfl_config structure.  Does not provide detailed
+error reporting.  To verify your JSON files use http://www.jsonlint.com.
+This version uses the cJSON library.
+
+
+EXAMPLE
+-------
+.From zfl_config_json_test method
+----
+    zfl_config_t *config = zfl_config_json_file ("zfl_config_test.json");
+    assert (config);
+
+    if (verbose) {
+        puts ("");
+        zfl_config_save (config, "-");
+    }
+    zfl_config_destroy (&config);
+
+    //  Try a non-existent file
+    config = zfl_config_json_file ("does_not_exist");
+    assert (config == NULL);
+
+    //  Try with some invalid JSON data
+    config = zfl_config_json ("<?xml><hello><world/></hello>");
+    zfl_config_destroy (&config);
+----
+
+SEE ALSO
+--------
+linkzfl:zfl[7]

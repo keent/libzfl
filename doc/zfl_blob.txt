@@ -3,7 +3,7 @@ zfl_blob(7)
 
 NAME
 ----
-zfl_blob - binary long object
+zfl_blob - work with binary long objects (blobs)
 
 SYNOPSIS
 --------

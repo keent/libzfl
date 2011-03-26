@@ -1,6 +1,6 @@
 #! /bin/bash
 #
-#   mksite - Upload zfl manual to zfl.zeromq.org/manual:
+#   mksite - Upload libzfl manual to zfl.zeromq.org/manual:
 #
 #   Author: Pieter Hintjens <ph@imatix.com>
 #   License: public domain
@@ -27,14 +27,14 @@ function do_upload {
 echo "Building docs..."
 make --quiet
 rm -f *.xml    #   Makefile does not detect version differences for XML
-for FILE in *.txt; do 
+for FILE in zfl_*.txt; do 
     ./mkman $FILE
     make `basename $FILE .txt`.xml
 done
 
 echo "Generating XML pages for manual..."
 FILES=
-for FILE in zfl.txt zfl_*.txt; do
+for FILE in libzfl.txt zfl_*.txt; do
     BASE=`basename $FILE .txt`
     make --quiet $BASE.xml;
     FILES="$FILES $BASE"
@@ -49,7 +49,7 @@ if [ $UPLOAD -eq 1 ]; then
     echo "Uploading to $CATEGORY..."
 
     #   Send table of contents as category:_start
-    do_upload "_start" "ZFL Documentation"
+    do_upload "_start" "libzfl Documentation"
 
     #   Send template as category:_template
     do_upload "_template" "Category template - generated"
