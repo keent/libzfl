@@ -32,7 +32,7 @@
 @end
 */
 
-#include <zapi.h>
+#include <czmq.h>
 #include "../include/zfl_thread.h"
 
 //  Structure of our class

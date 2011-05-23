@@ -24,7 +24,7 @@
     =========================================================================
 */
 
-#include <zapi.h>
+#include <czmq.h>
 #include "../include/zfl_base.h"
 #include "../include/zfl_bits.h"
 #include "../include/zfl_blob.h"

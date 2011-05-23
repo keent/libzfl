@@ -33,7 +33,7 @@
 @end
 */
 
-#include <zapi.h>
+#include <czmq.h>
 #include "../include/zfl_blob.h"
 #include "../include/zfl_config.h"
 #include "../include/zfl_device.h"

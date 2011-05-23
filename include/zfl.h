@@ -27,8 +27,7 @@
 
 //  Dependencies
 //
-#include <zmq.h>
-#include <zapi.h>
+#include <czmq.h>
 
 //  Classes listed in alphabetical order except for dependencies
 //

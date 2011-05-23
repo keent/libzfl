@@ -37,7 +37,7 @@ The general rule is, if you contribute code to libzfl you must be willing to mai
 
 ### Dependencies
 
-libzfl depends on libzapi (http://libzap.zeromq.org). Please build and install libzapi before building and installing libzfl.
+libzfl depends on czmq (http://czmq.zeromq.org). Please build and install libczmq before building and installing libzfl.
 
 ### Building and Installing
 
@@ -251,8 +251,8 @@ libzfl is explicitly meant to become a portability layer, similar to but thinner
 
 These are the places a C application is subject to arbitrary system differences:
 
-* Different compilers may offer slightly different variants of the C language, often lacking specific types or using neat non-portable names. Windows is a big culprit here. We solve this by 'patching' the language in zapi_prelude.h, e.g. defining int64_t on Windows.
-* System header files are inconsistent, i.e. you need to include different files depending on the OS type and version. We solve this by pulling in all necessary header files in zapi_prelude.h. This is a proven brute-force approach that increases recompilation times but eliminates a major source of pain.
+* Different compilers may offer slightly different variants of the C language, often lacking specific types or using neat non-portable names. Windows is a big culprit here. We solve this by 'patching' the language in czmq_prelude.h, e.g. defining int64_t on Windows.
+* System header files are inconsistent, i.e. you need to include different files depending on the OS type and version. We solve this by pulling in all necessary header files in czmq_prelude.h. This is a proven brute-force approach that increases recompilation times but eliminates a major source of pain.
 * System libraries are inconsistent, i.e. you need to link with different libraries depending on the OS type and version. We solve this with an external compilation tool, 'C', which detects the OS type and version (at runtime) and builds the necessary link commands.
 * System functions are inconsistent, i.e. you need to call different functions depending, again, on OS type and version. We solve this by building small abstract classes that handle specific areas of functionality, and doing conditional compilation in these.
 
@@ -266,7 +266,7 @@ An example of the last:
         pid = 0;
     #endif
 
-libzfl uses the GNU autotools system, so non-portable code can use the macros this defines. It can also use macros defined by the zapi_prelude.h header file.
+libzfl uses the GNU autotools system, so non-portable code can use the macros this defines. It can also use macros defined by the czmq_prelude.h header file.
 
 ### Technical Aspects
 
@@ -337,7 +337,7 @@ Man pages are generated from the class header and source files via the doc/mkman
 
 The source file for a class must provide documentation as follows:
 
-    /*  
+    /*
     @header
     ...short explanation of class...
     @discuss
@@ -357,10 +357,10 @@ The template for man pages is in doc/mkman.
 
 When you try libzfl on an OS that it's not been used on (ever, or for a while), you will hit code that does not compile. In some cases the patches are trivial, in other cases (usually when porting to Windows), the work needed to build equivalent functionality may be quite heavy. In any case, the benefit is that once ported, the functionality is available to all applications.
 
-Before attempting to patch code for portability, please read the `zapi_prelude.h` header file. There are several typical types of changes you may need to make to get functionality working on a specific operating system:
+Before attempting to patch code for portability, please read the `czmq_prelude.h` header file. There are several typical types of changes you may need to make to get functionality working on a specific operating system:
 
-* Defining typedefs which are missing on that specific compiler: do this in zapi_prelude.h.
-* Defining macros that rename exotic library functions to more conventional names: do this in zapi_prelude.h.
+* Defining typedefs which are missing on that specific compiler: do this in czmq_prelude.h.
+* Defining macros that rename exotic library functions to more conventional names: do this in czmq_prelude.h.
 * Reimplementing specific methods to use a non-standard API: this is typically needed on Windows. Do this in the relevant class, using #ifdefs to properly differentiate code for different platforms.
 
 The canonical 'standard operating system' for all libzfl code is Linux, gcc, POSIX.

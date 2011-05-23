@@ -30,7 +30,7 @@
 @end
 */
 
-#include <zapi.h>
+#include <czmq.h>
 #include "../include/zfl_bits.h"
 
 //  Structure of our class

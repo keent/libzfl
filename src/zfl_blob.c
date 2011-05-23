@@ -31,7 +31,7 @@
 @end
 */
 
-#include <zapi.h>
+#include <czmq.h>
 #include "../include/zfl_blob.h"
 
 //  Structure of our class
