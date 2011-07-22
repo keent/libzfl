@@ -37,7 +37,7 @@ The general rule is, if you contribute code to libzfl you must be willing to mai
 
 ### Dependencies
 
-libzfl depends on czmq (http://czmq.zeromq.org). Please build and install libczmq before building and installing libzfl.
+libzfl depends on [CZMQ](http://czmq.zeromq.org). Please build and install CZMQ before building and installing libzfl.
 
 ### Building and Installing
 

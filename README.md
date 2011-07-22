@@ -79,7 +79,7 @@ The general rule is, if you contribute code to libzfl you must be willing to mai
 <A name="toc3-44" title="Dependencies" />
 ### Dependencies
 
-libzfl depends on czmq (http://czmq.zeromq.org). Please build and install libczmq before building and installing libzfl.
+libzfl depends on [CZMQ](http://czmq.zeromq.org). Please build and install CZMQ before building and installing libzfl.
 
 <A name="toc3-49" title="Building and Installing" />
 ### Building and Installing
