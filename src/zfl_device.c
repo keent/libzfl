@@ -246,7 +246,7 @@ zfl_device_socket (
 }
 
 //  Process options settings
-//
+//  todo: update these options with found here: http://api.zeromq.org/3-1:zmq-setsockopt
 int
 s_setsockopt (zfl_device_t *self, void *socket, zfl_config_t *config)
 {
@@ -255,21 +255,21 @@ s_setsockopt (zfl_device_t *self, void *socket, zfl_config_t *config)
     while (config && rc == 0) {
         char *name = zfl_config_name (config);
         char *value = zfl_config_string (config);
-        if (streq (name, "hwm")) {
-            uint64_t optvalue = atoi (value);
-            rc = zmq_setsockopt (socket, ZMQ_HWM, &optvalue, sizeof (optvalue));
+
+        if (streq (name, "sndhwm")) {
+            int64_t optvalue = atoi (value);
+            rc = zmq_setsockopt (socket, ZMQ_SNDHWM, &optvalue, sizeof (optvalue));
         }
         else
-        if (streq (name, "swap")) {
+        if (streq (name, "rcvhwm")) {
             int64_t optvalue = atoi (value);
-            rc = zmq_setsockopt (socket, ZMQ_SWAP, &optvalue, sizeof (optvalue));
+            rc = zmq_setsockopt (socket, ZMQ_RCVHWM, &optvalue, sizeof (optvalue));
         }
         else
         if (streq (name, "affinity")) {
             uint64_t optvalue = atoi (value);
             rc = zmq_setsockopt (socket, ZMQ_AFFINITY, &optvalue, sizeof (optvalue));
         }
-        else
         if (streq (name, "identity"))
             rc = zmq_setsockopt (socket, ZMQ_IDENTITY, value, strlen (value));
         else
@@ -284,11 +284,6 @@ s_setsockopt (zfl_device_t *self, void *socket, zfl_config_t *config)
         if (streq (name, "recovery_ivl")) {
             int64_t optvalue = atoi (value);
             rc = zmq_setsockopt (socket, ZMQ_RECOVERY_IVL, &optvalue, sizeof (optvalue));
-        }
-        else
-        if (streq (name, "mcast_loop")) {
-            int64_t optvalue = atoi (value);
-            rc = zmq_setsockopt (socket, ZMQ_MCAST_LOOP, &optvalue, sizeof (optvalue));
         }
         else
         if (streq (name, "sndbuf")) {

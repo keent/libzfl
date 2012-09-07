@@ -39,4 +39,5 @@ examples/.libs/
 examples/core
 src/core
 ipr
-
+.cproject
+.project
